@@ -3,21 +3,28 @@ import Router from 'vue-router'
 import NovelHeader from '@/components/HomeView/NovelHeader'
 import IndexView from '@/components/HomeView/IndexView'
 import BookHeader from '@/components/BookView/BookHeader'
+import BookDetailView from '@/components/BookView/BookDetailView'
 
 Vue.use(Router)
 
 export default new Router({
-	mode:'history',
-	linkExactActiveClass:'active',
+	mode: 'history',
+	linkExactActiveClass: 'active',
 	routes: [{
-		path: '/',
-		name: 'NovelHeader',
-		component: NovelHeader,
-		alias: '/home'
-	},
-	{
-		path:'/book',
-		name:'BookHeader',
-		component:BookHeader
-	}]
+			path: '/',
+			name: 'NovelHeader',
+			component: NovelHeader,
+			alias: '/home'
+		},
+		{
+			path: '/book',
+			name: 'BookHeader',
+			component: BookHeader,
+			children: [{
+				path: 'detail',
+				name: 'BookDetailView',
+				component: BookDetailView
+			}]
+		}
+	]
 })

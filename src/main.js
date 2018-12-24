@@ -4,6 +4,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+
 import 'swiper/dist/css/swiper.css'
 import './assets/sass/_icon.scss'
 
@@ -17,3 +18,4 @@ new Vue({
 	router,
 	render: h => h(App)
 })
+

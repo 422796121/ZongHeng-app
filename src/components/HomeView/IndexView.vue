@@ -36,7 +36,7 @@
 			<div class="title">
 				<h2>编辑力荐</h2>
 			</div>
-			<div class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex">
+			<router-link tag="div" class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex" :to="{path:'/book/detail',query: {detailId: recombook._id,detailName:recombook.title}}">
 				<div class="cover">
 					<img :src="decodeURIComponent(recombook.cover.split(`/agent/`)[1])" width="68" height="90">
 				</div>
@@ -52,7 +52,7 @@
 						<span class="tag-sort">{{recombook.cat}}</span>
 					</div>
 				</div>
-			</div>
+			</router-link>
 		</div>
 		<!-- 编辑力荐 END -->
 		<div class="bg-div"></div>
@@ -61,7 +61,7 @@
 			<div class="title">
 				<h2>男生必读</h2>
 			</div>
-			<div class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex">
+			<router-link tag="div" class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" :to="{path:'/book/detail',query: {detailId: manbook._id,detailName:manbook.title}}">
 				<div class="cover">
 					<img :src="decodeURIComponent(manbook.cover.split(`/agent/`)[1])" width="82" height="108">
 				</div>
@@ -70,7 +70,7 @@
 						<h3>{{manbook.title}}</h3>
 					</div>
 				</div>
-			</div>
+			</router-link>
 			<div class="clearfix"></div>
 		</div>
 		<!-- 男生必读 END -->
@@ -80,7 +80,7 @@
 			<div class="title">
 				<h2>女生必读</h2>
 			</div>
-			<div class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex">
+			<router-link tag="div" class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" :to="{path:'/book/detail',query: {detailId: womanbook._id,detailName:womanbook.title}}">
 				<div class="cover">
 					<img :src="decodeURIComponent(womanbook.cover.split(`/agent/`)[1])" width="82" height="108">
 				</div>
@@ -89,7 +89,7 @@
 						<h3>{{womanbook.title}}</h3>
 					</div>
 				</div>
-			</div>
+			</router-link>
 			<div class="clearfix"></div>
 		</div>
 		<!-- 女生必读 END -->
@@ -99,7 +99,7 @@
 			<div class="title">
 				<h2>都市娱乐</h2>
 			</div>
-			<div class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex">
+			<router-link tag="div" class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" :to="{path:'/book/detail',query: {detailId: citybook._id,detailName:citybook.title}}">
 				<div class="wrapper-first" v-show="cityindex==0?true:false">
 					<div class="cover">
 						<img :src="decodeURIComponent(citybook.cover.split(`/agent/`)[1])" width="68" height="90">
@@ -121,9 +121,9 @@
 					<div class="else-text">
 						<span>[{{citybook.cat}}]{{citybook.title}}:{{citybook.shortIntro}}</span>
 					</div>
-					<i class="icon-uniE900"></i>
+					<i class="icon-right"></i>
 				</div>
-			</div>
+			</router-link>
 		</div>
 		<!-- 都市 END -->
 		<div class="bg-div"></div>
@@ -132,7 +132,7 @@
 			<div class="title">
 				<h2>游戏竞技</h2>
 			</div>
-			<div class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex">
+			<router-link tag="div" class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" :to="{path:'/book/detail',query: {detailId: gamebook._id,detailName:gamebook.title}}">
 				<div class="wrapper-first" v-if="gameindex==0?true:false">
 					<div class="cover">
 						<img :src="decodeURIComponent(gamebook.cover.split(`/agent/`)[1])" width="68" height="90">
@@ -154,9 +154,9 @@
 					<div class="else-text">
 						<span>[{{gamebook.cat}}]{{gamebook.title}}:{{gamebook.shortIntro}}</span>
 					</div>
-					<i class="icon-uniE900"></i>
+					<i class="icon-right"></i>
 				</div>
-			</div>
+			</router-link>
 		</div>
 		<!-- 游戏 END -->
 	</div>
@@ -165,24 +165,30 @@
 
 <script>
 	import Swiper from 'swiper'
+	import {
+		getHomeData
+	} from '../../main'
 	export default {
 		name: 'IndexView',
+		props: ['homeData'],
 		data() {
 			return {
 				recomArr: [], // 编辑推荐
 				manArr: [], // 男生
 				womanArr: [], // 女生
 				cityArr: [], // 都市
-				gameArr: [] // 游戏
+				gameArr: [], // 游戏
+				pathdata: '/home/data',
+				path: '/home'
 			}
 		},
 		created() {
 			this.$nextTick(() => {
-				this.getData(this.recomArr, 'recom', '玄幻', 0, 3)
-				this.getData(this.manArr, 'man', '女神', 0, 6)
-				this.getData(this.womanArr, 'woman', '男神', 0, 6)
-				this.getData(this.cityArr, 'city', '都市', 2, 5)
-				this.getData(this.gameArr, 'game', '游戏', 2, 5)
+				this.getHomeData(this.recomArr, 'recom', '玄幻', 0, 3)
+				this.getHomeData(this.manArr, 'man', '女神', 0, 6)
+				this.getHomeData(this.womanArr, 'woman', '男神', 0, 6)
+				this.getHomeData(this.cityArr, 'city', '都市', 2, 5)
+				this.getHomeData(this.gameArr, 'game', '游戏', 2, 5)
 			})
 		},
 		mounted() {
@@ -201,8 +207,8 @@
 			})
 		},
 		methods: {
-			getData(arr, str, query, start, limit) {
-				this.axios.get('/homedata', {
+			getHomeData(arr, str, query, start, limit) {
+				this.axios.get('/data/home', {
 						params: {
 							query: encodeURIComponent(query),
 							start: start,
@@ -213,10 +219,18 @@
 						res = res.data
 						if (res.errno === 0) {
 							arr.push(JSON.parse(res.data).books)
-							this.$router.replace('/home')
+							// this.$router.replace('/home')
 						}
 						// console.log(arr)
 					})
+			},
+			goDetail(detailId) {
+				this.$router.push({
+					path: '/book/detail',
+					params: {
+						detailId
+					}
+				})
 			}
 		}
 	}
@@ -495,7 +509,8 @@
 
 		}
 
-		.city-view,.game-view {
+		.city-view,
+		.game-view {
 			margin-left: 50%;
 			width: 90%;
 			transform: translateX(-50%);
@@ -514,7 +529,8 @@
 				}
 			}
 
-			.city-wrapper,.game-wrapper{
+			.city-wrapper,
+			.game-wrapper {
 				.wrapper-first {
 					display: flex;
 					padding: 15px 0 10px;
@@ -605,13 +621,16 @@
 					}
 
 				}
-				.wrapper-else{
+
+				.wrapper-else {
 					display: flex;
 					width: 100%;
-					.else-text{
+
+					.else-text {
 						padding: 5px 0px;
 						width: 80%;
-						&>span{	
+
+						&>span {
 							display: inline-block;
 							width: 100%;
 							height: 40px;
@@ -622,7 +641,8 @@
 							font-size: 16px;
 						}
 					}
-					& > i{
+
+					&>i {
 						position: relative;
 						width: 20%;
 						height: 50px;
@@ -630,7 +650,7 @@
 						font-size: 16px;
 						text-align: right;
 						vertical-align: bottom;
-						color: RGB(205,205,205);
+						color: RGB(205, 205, 205);
 					}
 				}
 			}

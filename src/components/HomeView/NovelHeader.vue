@@ -48,6 +48,7 @@
 	import NovelFooter from '../NovelFooter'
 	export default {
 		name: 'NovelHeader',
+		props:['getHomeData'],
 		data() {
 			return {
 				homeScroll: null
