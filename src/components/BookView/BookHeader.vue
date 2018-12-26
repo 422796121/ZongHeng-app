@@ -1,54 +1,37 @@
 <template>
-	<div class="book-detail-home" ref="detail">
-		<ul>
-			<li>
-				<div class="book-header" ref="detail">
-
-					<div class="header-wrapper">
-						<span class="back" @click="backPage"><i class="icon-left back-icon"></i>返回</span>
-						<span class="title">本书详情</span>
-						<span class="shelf"><i class="icon-shelf shelf-icon"></i>书架</span>
-					</div>
-				</div>
-			</li>
-			<li>
-				<book-detail-view></book-detail-view>
-			</li>
-			<li>
-				<novel-footer></novel-footer>
-			</li>
-		</ul>
+	<div class="book-detail-home">
+		<div class="book-header">
+			<div class="header-wrapper">
+				<span class="back" @click="backPage(where)"><i class="icon-left back-icon"></i>返回</span>
+				<span class="title">{{topTitle}}</span>
+				<span class="shelf"><i class="icon-shelf shelf-icon"></i>书架</span>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-	import BookDetailView from './BookDetailView'
-	import BScroll from 'better-scroll'
-	import NovelFooter from '../NovelFooter'
 	export default {
 		name: 'BookHeader',
-		created() {
-			this.$nextTick(() => {
-				this._initHomeScroll()
-			})
-		},
+		props: ['topTitle', 'where', 'detailid'],
 		methods: {
-			backPage() {
-				this.$router.go(-1)
-			},
-			_initHomeScroll() {
-				if (!this.homeScroll) {
-					this.homeScroll = new BScroll(this.$refs.detail, {
-						click: true
+			backPage(where) {
+				if (where === 'detail') {
+					this.$router.push({
+						path: '/'
+					})
+				} else if (where === 'chapter') {
+					this.$router.push({
+						path: '/book/detail',
+						query: {
+							detailId: this.detailid,
+							topTitle: '本书详情'
+						}
 					})
 				} else {
-					this.homeScroll.refresh()
+					this.$router.go(-1)
 				}
 			}
-		},
-		components: {
-			BookDetailView,
-			NovelFooter
 		}
 	}
 </script>

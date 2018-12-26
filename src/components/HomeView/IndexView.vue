@@ -36,7 +36,7 @@
 			<div class="title">
 				<h2>编辑力荐</h2>
 			</div>
-			<router-link tag="div" class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex" :to="{path:'/book/detail',query: {detailId: recombook._id,detailName:recombook.title}}">
+			<div class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex" @click="goDetail(recombook._id,topname)">
 				<div class="cover">
 					<img :src="decodeURIComponent(recombook.cover.split(`/agent/`)[1])" width="68" height="90">
 				</div>
@@ -52,7 +52,7 @@
 						<span class="tag-sort">{{recombook.cat}}</span>
 					</div>
 				</div>
-			</router-link>
+			</div>
 		</div>
 		<!-- 编辑力荐 END -->
 		<div class="bg-div"></div>
@@ -61,7 +61,7 @@
 			<div class="title">
 				<h2>男生必读</h2>
 			</div>
-			<router-link tag="div" class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" :to="{path:'/book/detail',query: {detailId: manbook._id,detailName:manbook.title}}">
+			<div class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" @click="goDetail(manbook._id,topname)">
 				<div class="cover">
 					<img :src="decodeURIComponent(manbook.cover.split(`/agent/`)[1])" width="82" height="108">
 				</div>
@@ -70,7 +70,7 @@
 						<h3>{{manbook.title}}</h3>
 					</div>
 				</div>
-			</router-link>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 		<!-- 男生必读 END -->
@@ -80,7 +80,7 @@
 			<div class="title">
 				<h2>女生必读</h2>
 			</div>
-			<router-link tag="div" class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" :to="{path:'/book/detail',query: {detailId: womanbook._id,detailName:womanbook.title}}">
+			<div class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" @click="goDetail(womanbook._id,topname)">
 				<div class="cover">
 					<img :src="decodeURIComponent(womanbook.cover.split(`/agent/`)[1])" width="82" height="108">
 				</div>
@@ -89,7 +89,7 @@
 						<h3>{{womanbook.title}}</h3>
 					</div>
 				</div>
-			</router-link>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 		<!-- 女生必读 END -->
@@ -99,7 +99,7 @@
 			<div class="title">
 				<h2>都市娱乐</h2>
 			</div>
-			<router-link tag="div" class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" :to="{path:'/book/detail',query: {detailId: citybook._id,detailName:citybook.title}}">
+			<div class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" @click="goDetail(citybook._id,topname)">
 				<div class="wrapper-first" v-show="cityindex==0?true:false">
 					<div class="cover">
 						<img :src="decodeURIComponent(citybook.cover.split(`/agent/`)[1])" width="68" height="90">
@@ -123,7 +123,7 @@
 					</div>
 					<i class="icon-right"></i>
 				</div>
-			</router-link>
+			</div>
 		</div>
 		<!-- 都市 END -->
 		<div class="bg-div"></div>
@@ -132,7 +132,7 @@
 			<div class="title">
 				<h2>游戏竞技</h2>
 			</div>
-			<router-link tag="div" class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" :to="{path:'/book/detail',query: {detailId: gamebook._id,detailName:gamebook.title}}">
+			<div class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" @click="goDetail(gamebook._id,topname)">
 				<div class="wrapper-first" v-if="gameindex==0?true:false">
 					<div class="cover">
 						<img :src="decodeURIComponent(gamebook.cover.split(`/agent/`)[1])" width="68" height="90">
@@ -156,7 +156,7 @@
 					</div>
 					<i class="icon-right"></i>
 				</div>
-			</router-link>
+			</div>
 		</div>
 		<!-- 游戏 END -->
 	</div>
@@ -165,9 +165,6 @@
 
 <script>
 	import Swiper from 'swiper'
-	import {
-		getHomeData
-	} from '../../main'
 	export default {
 		name: 'IndexView',
 		props: ['homeData'],
@@ -179,7 +176,8 @@
 				cityArr: [], // 都市
 				gameArr: [], // 游戏
 				pathdata: '/home/data',
-				path: '/home'
+				path: '/home',
+				topname: '本书详情'
 			}
 		},
 		created() {
@@ -224,11 +222,12 @@
 						// console.log(arr)
 					})
 			},
-			goDetail(detailId) {
+			goDetail(detailid, name) {
 				this.$router.push({
 					path: '/book/detail',
-					params: {
-						detailId
+					query: {
+						detailId: detailid,
+						topTitle: name
 					}
 				})
 			}

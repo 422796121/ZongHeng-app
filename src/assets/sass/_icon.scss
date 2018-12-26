@@ -24,7 +24,38 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-updated:before {
+.icon-bg:before {
+  content: "\e906";
+  color: #fff;
+}
+.icon-comm:before {
+  content: "\e907";
+  color: #fff;
+}
+.icon-font:before {
+  content: "\e908";
+  color: #fff;
+}
+.icon-menu:before {
+  content: "\e909";
+  color: #fff;
+}
+.icon-next:before {
+  content: "\e90a";
+  color: #fff;
+}
+.icon-night:before {
+  content: "\e90b";
+  color: #fff;
+}
+.icon-prev:before {
+  content: "\e90c";
+  color: #fff;
+}
+.icon-sort:before {
+  content: "\e905";
+}
+.icon-update:before {
   content: "\e904";
   color: #d81e06;
 }

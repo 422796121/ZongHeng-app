@@ -17,7 +17,7 @@ const express = require('express')
 const axios = require('axios')
 const app = express()
 var apiRoutes = express.Router()
-app.use('/data',apiRoutes)
+app.use('/data', apiRoutes)
 // 后端代理 绕过host及referer ----END
 
 const HOST = process.env.HOST
@@ -67,8 +67,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 						})
 				}),
 				app.get('/data/source', (req, res) => {
-					// let key = req.query
-					superagent.get(`api.zhuishushenqi.com/toc?view=summary&book=57206c3539a913ad65d35c7b`)
+					let key = req.query
+					superagent.get(`api.zhuishushenqi.com/toc?view=summary&book=${key.bookid}`)
 						.end((err, data) => {
 							if (err) {
 								console.log(err)
@@ -81,7 +81,20 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 				}),
 				app.get('/data/chapter', (req, res) => {
 					let key = req.query
-					superagent.get(`api.zhuishushenqi.com/toc/${key.sourceId}?view=chapters`)
+					superagent.get(`api.zhuishushenqi.com/toc/${key.sourceid}?view=chapters`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/reading', (req, res) => {
+					let key = req.query
+					superagent.get(`chapter2.zhuishushenqi.com/chapter/${key.chapterid}?k=2124b73d7e2e1945&t=1468223717`)
 						.end((err, data) => {
 							if (err) {
 								console.log(err)
