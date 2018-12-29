@@ -23,6 +23,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	text-decoration: none;
 	vertical-align: baseline;
+	list-style: none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 

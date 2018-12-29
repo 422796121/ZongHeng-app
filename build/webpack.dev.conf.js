@@ -17,7 +17,7 @@ const express = require('express')
 const axios = require('axios')
 const app = express()
 var apiRoutes = express.Router()
-app.use('/data',apiRoutes)
+app.use('/data', apiRoutes)
 // 后端代理 绕过host及referer ----END
 
 const HOST = process.env.HOST
@@ -67,8 +67,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 						})
 				}),
 				app.get('/data/source', (req, res) => {
-					// let key = req.query
-					superagent.get(`api.zhuishushenqi.com/toc?view=summary&book=57206c3539a913ad65d35c7b`)
+					let key = req.query
+					superagent.get(`api.zhuishushenqi.com/toc?view=summary&book=${key.bookid}`)
 						.end((err, data) => {
 							if (err) {
 								console.log(err)
@@ -81,7 +81,86 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 				}),
 				app.get('/data/chapter', (req, res) => {
 					let key = req.query
-					superagent.get(`api.zhuishushenqi.com/toc/${key.sourceId}?view=chapters`)
+					superagent.get(`api.zhuishushenqi.com/toc/${key.sourceid}?view=chapters`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/reading', (req, res) => {
+					let key = req.query
+					superagent.get(`chapter2.zhuishushenqi.com/chapter/${key.chapterid}?k=2124b73d7e2e1945&t=1468223717`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/classify', (req, res) => {
+					superagent.get('https://novel.juhe.im/sub-categories')
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/classifydetail', (req, res) => {
+					let key = req.query
+					superagent.get(
+							`novel.juhe.im/category-info?gender=male&type=hot&major=${key.major}&minor=${key.mins}&start=${key.start}&limit=${key.limit}`
+						)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/rank', (req, res) => {
+					let key = req.query
+					superagent.get(`novel.juhe.im/rank-category`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/rankdetail', (req, res) => {
+					let key = req.query
+					superagent.get(`novel.juhe.im/rank/${key.rankid}`)
+						.end((err, data) => {
+							if (err) {
+								console.log(err)
+							}
+							res.json({
+								errno: 0,
+								data: data.text
+							})
+						})
+				}),
+				app.get('/data/search', (req, res) => {
+					let key = req.query
+					superagent.get(`novel.juhe.im/search?keyword=${key.searchid}`)
 						.end((err, data) => {
 							if (err) {
 								console.log(err)

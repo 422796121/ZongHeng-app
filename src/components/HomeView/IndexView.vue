@@ -1,185 +1,201 @@
 <template>
-	<div class="home-content">
-		<!-- 轮播图 -->
-		<div class="home-slide">
-			<div class="swiper-container">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<img src="../../assets/img/slide1.jpg">
-					</div>
-					<div class="swiper-slide">
-						<img src="../../assets/img/slide2.jpg">
-					</div>
-					<div class="swiper-slide">
-						<img src="../../assets/img/slide3.jpg">
-					</div>
-					<div class="swiper-slide">
-						<img src="../../assets/img/slide4.jpg">
-					</div>
-				</div>
-				<div class="swiper-pagination"></div>
-			</div>
-		</div>
-		<!-- 轮播图 END -->
-		<!-- 男女分区 -->
-		<div class="home-sort">
-			<div class="home-man">
-				<a href=""><i class="manicon"></i><span>男生专区</span></a>
-			</div>
-			<div class="home-wom">
-				<a href=""><i class="womanicon"></i><span>女生专区</span></a>
-			</div>
-		</div>
-		<!-- 男女分区 END -->
-		<!-- 编辑力荐 -->
-		<div class="recom" v-for="(recombooks,recomindexs) in recomArr" :key="recomindexs">
-			<div class="title">
-				<h2>编辑力荐</h2>
-			</div>
-			<router-link tag="div" class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex" :to="{path:'/book/detail',query: {detailId: recombook._id,detailName:recombook.title}}">
-				<div class="cover">
-					<img :src="decodeURIComponent(recombook.cover.split(`/agent/`)[1])" width="68" height="90">
-				</div>
-				<div class="content">
-					<div class="name">
-						<h3>{{recombook.title}}</h3>
-					</div>
-					<div class="desc">
-						<p>{{recombook.shortIntro}}</p>
-					</div>
-					<div class="tag">
-						<span class="author"><i class="author-img"></i><em class="text">{{recombook.author}}</em></span>
-						<span class="tag-sort">{{recombook.cat}}</span>
-					</div>
-				</div>
-			</router-link>
-		</div>
-		<!-- 编辑力荐 END -->
-		<div class="bg-div"></div>
-		<!-- 男生必读 -->
-		<div class="man-view" v-for="(manbooks,manindexs) in manArr" :key="manindexs + '-man'">
-			<div class="title">
-				<h2>男生必读</h2>
-			</div>
-			<router-link tag="div" class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" :to="{path:'/book/detail',query: {detailId: manbook._id,detailName:manbook.title}}">
-				<div class="cover">
-					<img :src="decodeURIComponent(manbook.cover.split(`/agent/`)[1])" width="82" height="108">
-				</div>
-				<div class="content">
-					<div class="name">
-						<h3>{{manbook.title}}</h3>
-					</div>
-				</div>
-			</router-link>
-			<div class="clearfix"></div>
-		</div>
-		<!-- 男生必读 END -->
-		<div class="bg-div"></div>
-		<!-- 女生必读 -->
-		<div class="woman-view" v-for="(womanbooks,womanindexs) in womanArr" :key="womanindexs + '-woman'">
-			<div class="title">
-				<h2>女生必读</h2>
-			</div>
-			<router-link tag="div" class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" :to="{path:'/book/detail',query: {detailId: womanbook._id,detailName:womanbook.title}}">
-				<div class="cover">
-					<img :src="decodeURIComponent(womanbook.cover.split(`/agent/`)[1])" width="82" height="108">
-				</div>
-				<div class="content">
-					<div class="name">
-						<h3>{{womanbook.title}}</h3>
-					</div>
-				</div>
-			</router-link>
-			<div class="clearfix"></div>
-		</div>
-		<!-- 女生必读 END -->
-		<div class="bg-div"></div>
-		<!-- 都市 -->
-		<div class="city-view" v-for="(citybooks,cityindexs) in cityArr" :key="cityindexs + '-city'">
-			<div class="title">
-				<h2>都市娱乐</h2>
-			</div>
-			<router-link tag="div" class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" :to="{path:'/book/detail',query: {detailId: citybook._id,detailName:citybook.title}}">
-				<div class="wrapper-first" v-show="cityindex==0?true:false">
-					<div class="cover">
-						<img :src="decodeURIComponent(citybook.cover.split(`/agent/`)[1])" width="68" height="90">
-					</div>
-					<div class="content">
-						<div class="name">
-							<h3>{{citybook.title}}</h3>
+	<div class="home-content" ref="home">
+		<ul>
+			<li>
+				<novel-header></novel-header>
+			</li>
+			<li>
+				<!-- 轮播图 -->
+				<div class="home-slide">
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<img src="../../assets/img/slide1.jpg">
+							</div>
+							<div class="swiper-slide">
+								<img src="../../assets/img/slide2.jpg">
+							</div>
+							<div class="swiper-slide">
+								<img src="../../assets/img/slide3.jpg">
+							</div>
+							<div class="swiper-slide">
+								<img src="../../assets/img/slide4.jpg">
+							</div>
 						</div>
-						<div class="desc">
-							<p>{{citybook.shortIntro}}</p>
+						<div class="swiper-pagination"></div>
+					</div>
+				</div>
+				<!-- 轮播图 END -->
+				<!-- 男女分区 -->
+				<div class="home-sort">
+					<div class="home-man">
+						<a href=""><i class="manicon"></i><span>男生专区</span></a>
+					</div>
+					<div class="home-wom">
+						<a href=""><i class="womanicon"></i><span>女生专区</span></a>
+					</div>
+				</div>
+				<!-- 男女分区 END -->
+				<!-- 编辑力荐 -->
+				<div class="recom" v-for="(recombooks,recomindexs) in recomArr" :key="recomindexs">
+					<div class="title">
+						<h2>编辑力荐</h2>
+					</div>
+					<div class="recom-wrapper" v-for="(recombook,recomindex) in recombooks" :key="recomindex" @click="goDetail(recombook._id,topname)">
+						<div class="cover">
+							<img :src="decodeURIComponent(recombook.cover.split(`/agent/`)[1])" width="68" height="90">
 						</div>
-						<div class="tag">
-							<span class="author"><i class="author-img"></i><em class="text">{{citybook.author}}</em></span>
-							<span class="tag-sort">{{citybook.cat}}</span>
+						<div class="content">
+							<div class="name">
+								<h3>{{recombook.title}}</h3>
+							</div>
+							<div class="desc">
+								<p>{{recombook.shortIntro}}</p>
+							</div>
+							<div class="tag">
+								<span class="author"><i class="author-img"></i><em class="text">{{recombook.author}}</em></span>
+								<span class="tag-sort">{{recombook.cat}}</span>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="wrapper-else" v-show="cityindex==0?false:true">
-					<div class="else-text">
-						<span>[{{citybook.cat}}]{{citybook.title}}:{{citybook.shortIntro}}</span>
+				<!-- 编辑力荐 END -->
+				<div class="bg-div"></div>
+				<!-- 男生必读 -->
+				<div class="man-view" v-for="(manbooks,manindexs) in manArr" :key="manindexs + '-man'">
+					<div class="title">
+						<h2>男生必读</h2>
 					</div>
-					<i class="icon-right"></i>
-				</div>
-			</router-link>
-		</div>
-		<!-- 都市 END -->
-		<div class="bg-div"></div>
-		<!-- 游戏 -->
-		<div class="game-view" v-for="(gamebooks,gameindexs) in gameArr" :key="gameindexs + '-game'">
-			<div class="title">
-				<h2>游戏竞技</h2>
-			</div>
-			<router-link tag="div" class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" :to="{path:'/book/detail',query: {detailId: gamebook._id,detailName:gamebook.title}}">
-				<div class="wrapper-first" v-if="gameindex==0?true:false">
-					<div class="cover">
-						<img :src="decodeURIComponent(gamebook.cover.split(`/agent/`)[1])" width="68" height="90">
-					</div>
-					<div class="content">
-						<div class="name">
-							<h3>{{gamebook.title}}</h3>
+					<div class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" @click="goDetail(manbook._id,topname)">
+						<div class="cover">
+							<img :src="decodeURIComponent(manbook.cover.split(`/agent/`)[1])" width="82" height="108">
 						</div>
-						<div class="desc">
-							<p>{{gamebook.shortIntro}}</p>
-						</div>
-						<div class="tag">
-							<span class="author"><i class="author-img"></i><em class="text">{{gamebook.author}}</em></span>
-							<span class="tag-sort">{{gamebook.cat}}</span>
+						<div class="content">
+							<div class="name">
+								<h3>{{manbook.title}}</h3>
+							</div>
 						</div>
 					</div>
+					<div class="clearfix"></div>
 				</div>
-				<div class="wrapper-else" else>
-					<div class="else-text">
-						<span>[{{gamebook.cat}}]{{gamebook.title}}:{{gamebook.shortIntro}}</span>
+				<!-- 男生必读 END -->
+				<div class="bg-div"></div>
+				<!-- 女生必读 -->
+				<div class="woman-view" v-for="(womanbooks,womanindexs) in womanArr" :key="womanindexs + '-woman'">
+					<div class="title">
+						<h2>女生必读</h2>
 					</div>
-					<i class="icon-right"></i>
+					<div class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" @click="goDetail(womanbook._id,topname)">
+						<div class="cover">
+							<img :src="decodeURIComponent(womanbook.cover.split(`/agent/`)[1])" width="82" height="108">
+						</div>
+						<div class="content">
+							<div class="name">
+								<h3>{{womanbook.title}}</h3>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
 				</div>
-			</router-link>
-		</div>
-		<!-- 游戏 END -->
+				<!-- 女生必读 END -->
+				<div class="bg-div"></div>
+				<!-- 都市 -->
+				<div class="city-view" v-for="(citybooks,cityindexs) in cityArr" :key="cityindexs + '-city'">
+					<div class="title">
+						<h2>都市娱乐</h2>
+					</div>
+					<div class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" @click="goDetail(citybook._id,topname)">
+						<div class="wrapper-first" v-show="cityindex==0?true:false">
+							<div class="cover">
+								<img :src="decodeURIComponent(citybook.cover.split(`/agent/`)[1])" width="68" height="90">
+							</div>
+							<div class="content">
+								<div class="name">
+									<h3>{{citybook.title}}</h3>
+								</div>
+								<div class="desc">
+									<p>{{citybook.shortIntro}}</p>
+								</div>
+								<div class="tag">
+									<span class="author"><i class="author-img"></i><em class="text">{{citybook.author}}</em></span>
+									<span class="tag-sort">{{citybook.cat}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="wrapper-else" v-show="cityindex==0?false:true">
+							<div class="else-text">
+								<span>[{{citybook.cat}}]{{citybook.title}}:{{citybook.shortIntro}}</span>
+							</div>
+							<i class="icon-right"></i>
+						</div>
+					</div>
+				</div>
+				<!-- 都市 END -->
+				<div class="bg-div"></div>
+				<!-- 游戏 -->
+				<div class="game-view" v-for="(gamebooks,gameindexs) in gameArr" :key="gameindexs + '-game'">
+					<div class="title">
+						<h2>游戏竞技</h2>
+					</div>
+					<div class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" @click="goDetail(gamebook._id,topname)">
+						<div class="wrapper-first" v-if="gameindex==0?true:false">
+							<div class="cover">
+								<img :src="decodeURIComponent(gamebook.cover.split(`/agent/`)[1])" width="68" height="90">
+							</div>
+							<div class="content">
+								<div class="name">
+									<h3>{{gamebook.title}}</h3>
+								</div>
+								<div class="desc">
+									<p>{{gamebook.shortIntro}}</p>
+								</div>
+								<div class="tag">
+									<span class="author"><i class="author-img"></i><em class="text">{{gamebook.author}}</em></span>
+									<span class="tag-sort">{{gamebook.cat}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="wrapper-else" else>
+							<div class="else-text">
+								<span>[{{gamebook.cat}}]{{gamebook.title}}:{{gamebook.shortIntro}}</span>
+							</div>
+							<i class="icon-right"></i>
+						</div>
+					</div>
+				</div>
+				<!-- 游戏 END -->
+			</li>
+			<li>
+				<novel-footer></novel-footer>
+			</li>
+		</ul>
 	</div>
 
 </template>
 
 <script>
+	import NovelHeader from './NovelHeader'
+	import NovelFooter from '../NovelFooter'
+	import BScroll from 'better-scroll'
 	import Swiper from 'swiper'
-	import {
-		getHomeData
-	} from '../../main'
 	export default {
 		name: 'IndexView',
 		props: ['homeData'],
+		components: {
+			NovelHeader,
+			NovelFooter
+		},
 		data() {
 			return {
+				homeScroll: null,
 				recomArr: [], // 编辑推荐
 				manArr: [], // 男生
 				womanArr: [], // 女生
 				cityArr: [], // 都市
 				gameArr: [], // 游戏
 				pathdata: '/home/data',
-				path: '/home'
+				path: '/home',
+				topname: '本书详情'
 			}
 		},
 		created() {
@@ -189,6 +205,7 @@
 				this.getHomeData(this.womanArr, 'woman', '男神', 0, 6)
 				this.getHomeData(this.cityArr, 'city', '都市', 2, 5)
 				this.getHomeData(this.gameArr, 'game', '游戏', 2, 5)
+				this._initHomeScroll()
 			})
 		},
 		mounted() {
@@ -224,21 +241,38 @@
 						// console.log(arr)
 					})
 			},
-			goDetail(detailId) {
+			goDetail(detailid, name) {
+				sessionStorage.setItem('detailid', detailid)
 				this.$router.push({
 					path: '/book/detail',
-					params: {
-						detailId
+					query: {
+						detailId: detailid,
+						topTitle: name
 					}
 				})
+			},
+			_initHomeScroll() {
+				if (!this.homeScroll) {
+					this.homeScroll = new BScroll(this.$refs.home, {
+						click: true
+					})
+				} else {
+					this.homeScroll.refresh()
+				}
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped="scoped">
 	.home-content {
-		height: auto;
+		height: 100%;
+
+		&>ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 
 		// 轮播图
 		.home-slide {
@@ -394,7 +428,7 @@
 							height: 42px;
 							padding-top: 2px;
 							display: inline-block;
-							width: 255px;
+							width: 100%;
 							line-height: 14px;
 							font-size: 13px;
 							color: rgb(136, 136, 136);
@@ -407,14 +441,16 @@
 
 					.tag {
 						position: absolute;
+						left: 0;
 						bottom: 0;
-						width: 255px;
+						width: 100%;
 						clear: both;
 						font-size: 13px;
 						font-weight: bold;
 						color: rgb(136, 136, 136);
 
 						&>.author {
+							margin-left: 10px;
 							display: inline-block;
 							height: 16px;
 							vertical-align: top;
@@ -450,6 +486,7 @@
 
 				}
 			}
+
 		}
 
 		// 男女分类

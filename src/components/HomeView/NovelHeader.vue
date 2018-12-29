@@ -1,83 +1,46 @@
 <template>
 	<div class="view" ref="home">
-		<ul>
-			<li>
-				<div class="top">
-					<div class="header">
-						<div class="img-wrapper">
-							<img src="../../assets/img/logo.png" width="150" height="28">
-						</div>
-						<div class="link-wrapper">
-							<div class="link-header">
-								<a href="#" class="link-search"><i class="icon-search searchIcon"></i></a>
-								<a href="#" class="link-new">客户端<em>new</em></a>
-							</div>
-						</div>
-					</div>
-					<div class="tab">
-						<div class="tab-item">
-							<router-link to="/home">首页</router-link>
-						</div>
-						<div class="tab-item">
-							<router-link to="/">分类</router-link>
-						</div>
-						<div class="tab-item">
-							<router-link to="/">排行</router-link>
-						</div>
-						<div class="tab-item">
-							<router-link to="/">书架</router-link>
-						</div>
+		<div class="top">
+			<div class="header">
+				<div class="img-wrapper">
+					<img src="../../assets/img/logo.png" width="150" height="28">
+				</div>
+				<div class="link-wrapper">
+					<div class="link-header">
+						<router-link to="/book/search" class="link-search"><i class="icon-search searchIcon"></i></router-link>
+						<router-link to="/" class="link-new">客户端<em>new</em></router-link>
 					</div>
 				</div>
-			</li>
-			<li>
-				<index-view></index-view>
-			</li>
-			<li>
-				<novel-footer></novel-footer>
-			</li>
-		</ul>
-
+			</div>
+			<div class="tab">
+				<div class="tab-item">
+					<router-link to="/">首页</router-link>
+				</div>
+				<div class="tab-item">
+					<router-link to="/classify">分类</router-link>
+				</div>
+				<div class="tab-item">
+					<router-link to="/rank">排行</router-link>
+				</div>
+				<div class="tab-item">
+					<router-link to="/shelf">书架</router-link>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </template>
 
 <script>
-	import IndexView from './IndexView'
-	import BScroll from 'better-scroll'
-	import NovelFooter from '../NovelFooter'
 	export default {
 		name: 'NovelHeader',
-		props:['getHomeData'],
 		data() {
-			return {
-				homeScroll: null
-			}
-		},
-		components: {
-			IndexView,
-			NovelFooter
-		},
-		created() {
-			this.$nextTick(() => {
-				this._initHomeScroll()
-			})
-		},
-		methods: {
-			_initHomeScroll() {
-				if (!this.homeScroll) {
-					this.homeScroll = new BScroll(this.$refs.home, {
-						click: true
-					})
-				} else {
-					this.homeScroll.refresh()
-				}
-			}
+			return {}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped="scoped">
 	.view {
 		width: 100%;
 		height: 100%;
@@ -114,7 +77,9 @@
 						.link-search {
 							.searchIcon {
 								line-height: 25px;
-								font-size: 16pxpx;
+								font-size: 16px;
+								color: #b7b7b7;
+								vertical-align: text-top;
 							}
 						}
 

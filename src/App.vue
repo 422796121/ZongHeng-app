@@ -1,9 +1,7 @@
 <template>
 	<div id="app">
 		<!-- <loading v-if="isLoading"></loading> -->
-		<!-- <novel-header></novel-header> -->
-		<router-view/>
-		<!-- <novel-footer></novel-footer> -->
+		<router-view />
 	</div>
 </template>
 
@@ -28,6 +26,13 @@
 </script>
 
 <style>
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
 	#app {
 		position: fixed;
 		top: 0;

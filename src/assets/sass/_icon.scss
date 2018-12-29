@@ -24,22 +24,50 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-updated:before {
-  content: "\e904";
-  color: #d81e06;
+.icon-clear:before {
+  content: "\e900";
+  color: #707070;
 }
-.icon-left:before {
-  content: "\e902";
-  color: #fff;
-}
-.icon-shelf:before {
-  content: "\e903";
-  color: #fff;
+.icon-history:before {
+  content: "\e901";
+  color: #8a8a8a;
 }
 .icon-search:before {
-  content: "\e900";
-  color: #808080;
+  content: "\e902";
 }
 .icon-right:before {
-  content: "\e901";
+  content: "\e903";
+}
+.icon-left:before {
+  content: "\e904";
+}
+.icon-shelf:before {
+  content: "\e905";
+}
+.icon-update:before {
+  content: "\e906";
+}
+.icon-sort:before {
+  content: "\e907";
+}
+.icon-bg:before {
+  content: "\e908";
+}
+.icon-comm:before {
+  content: "\e909";
+}
+.icon-font:before {
+  content: "\e90a";
+}
+.icon-menu:before {
+  content: "\e90b";
+}
+.icon-next:before {
+  content: "\e90c";
+}
+.icon-night:before {
+  content: "\e90d";
+}
+.icon-prev:before {
+  content: "\e90e";
 }
