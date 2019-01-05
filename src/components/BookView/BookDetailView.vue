@@ -28,7 +28,7 @@
 								<span>已有<em>{{detail.latelyFollower}}人次</em>读过此书</span>
 							</div>
 						</div>
-						<div class="add-shelf"><i>+</i>书架</div>
+						<div class="add-shelf" @click="addBook(addArr,listSession)"><i>+</i>书架</div>
 					</div>
 					<div class="detail-btn">
 						<div>
@@ -122,7 +122,10 @@
 				order: [], // 顺序
 				titleName: '本书详情', // 标题
 				topname: this.$route.query.topname,
-				where: 'detail'
+				where: 'detail',
+				addArr: sessionStorage['shelf'],
+				listSession: sessionStorage['list'],
+				readRect: sessionStorage['recent'] ? sessionStorage['recent'] : -1
 			}
 		},
 		created() {
@@ -132,6 +135,7 @@
 				this.getListData(this.listArr, 'list', this.detailName, 0, 1)
 				this.getSourceData(this.sourceArr, this.detialId)
 				this._initHomeScroll()
+				console.log(this.readRect)
 			})
 		},
 		methods: {
@@ -234,6 +238,68 @@
 					}
 				})
 			},
+			addBook(arr, listArr) {
+				let temp = []
+				let tempList = []
+				if (this.readRect === -1) {
+					this.readRect = 0
+				}
+				if (arr === undefined) {
+					arr = {}
+					arr['name'] = this.detailArr[0].title
+					arr['title'] = this.order[0].title
+					arr['link'] = this.order[0].link
+					arr['index'] = this.readRect
+					arr['getid'] = this.getId
+					arr['detailid'] = this.detialId
+					arr['author'] = this.detailArr[0].author
+					arr['cover'] = decodeURIComponent(this.detailArr[0].cover.split('/agent/')[1])
+					arr['lastChapter'] = this.detailArr[0].lastChapter
+					listArr = this.chapterArr
+					sessionStorage.setItem('shelf', JSON.stringify(arr))
+					sessionStorage.setItem('list', JSON.stringify(listArr))
+				} else {
+					arr = arr.split('++')
+					let j = 0
+					for (let i in arr) {
+						if (arr[i] !== '') {
+							arr[j] = JSON.parse(arr[i])
+							j++
+						}
+					}
+					arr.length = j
+					listArr = listArr.split('++')
+					j = 0
+					for (let i in listArr) {
+						if (listArr[i] !== '') {
+							listArr[j] = JSON.parse(listArr[i])
+							j++
+						}
+					}
+					listArr.length = j
+					let repeat = arr.find(a => a.detailid === this.detialId)
+					if (repeat === undefined) {
+						temp = arr
+						temp.push(this.getBook)
+						tempList = listArr
+						tempList.push(this.chapterArr)
+						sessionStorage.setItem('shelf', this.changeArr(temp))
+						sessionStorage.setItem('list', this.changeArr(tempList))
+					}
+				}
+				this.readRect = -1
+			},
+			changeArr(arr) {
+				let str = ''
+				for (let i in arr) {
+					if (i === 0) {
+						str = JSON.stringify(arr[i])
+					} else {
+						str += `++${JSON.stringify(arr[i])}`
+					}
+				}
+				return str
+			},
 			_initHomeScroll() {
 				if (!this.detailScroll) {
 					this.detailScroll = new BScroll(this.$refs.detail, {
@@ -263,6 +329,19 @@
 					result = `${parseInt(dec / (60 * 60 * 24 * 30 * 12))}年前`
 				}
 				return result
+			},
+			getBook() {
+				let arr = {}
+				arr['name'] = this.detailArr[0].title
+				arr['title'] = this.order[0].title
+				arr['link'] = this.order[0].link
+				arr['index'] = this.readRect
+				arr['getid'] = this.getId
+				arr['detailid'] = this.detialId
+				arr['author'] = this.detailArr[0].author
+				arr['cover'] = decodeURIComponent(this.detailArr[0].cover.split('/agent/')[1])
+				arr['lastChapter'] = this.detailArr[0].lastChapter
+				return arr
 			}
 		},
 		watch: {
@@ -327,8 +406,8 @@
 						padding: 3px 0;
 						font-size: 15px;
 						font-weight: bold;
-						
-						&>h2{
+
+						&>h2 {
 							overflow: hidden;
 							white-space: nowrap;
 							text-overflow: ellipsis;
@@ -411,6 +490,7 @@
 					display: inline-block;
 					font-size: 14px;
 					color: RGB(76, 76, 76);
+					overflow: hidden;
 				}
 
 				.updated {

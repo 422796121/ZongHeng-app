@@ -12,20 +12,27 @@
 <script>
 	export default {
 		name: 'SearchHeader',
-		props: ['searchFlag', 'history'],
+		props: ['searchFlag'],
 		data() {
 			return {
-				nowType: ''
+				nowType: '',
+				history: sessionStorage['history']
 			}
 		},
 		methods: {
 			toClassifyDetail() {
 				let key = this.$refs.searchVal.value
+				this.$refs.searchVal.value = ''
 				this.nowType = this.$route.query.type
-				this.$emit('update:history', key)
+				if (sessionStorage['history'] === undefined) {
+					this.history = key
+				} else {
+					this.history += `,${key}`
+				}
+				sessionStorage.setItem('history', this.history)
 				if (this.nowType !== 'search') {
 					this.$router.push({
-						name: 'BookClassify',
+						name: 'BookClassifyView',
 						query: {
 							searchid: encodeURIComponent(key),
 							type: 'search',

@@ -5,7 +5,7 @@
 				<book-header :topTitle="title" :where="where"></book-header>
 			</li>
 			<li>
-				<search-header :searchid.sync="searchid"></search-header>
+				<search-header :searchid.sync="searchid" v-show="type == 'search'"></search-header>
 				<div class="classify-wrapper">
 					<div class="title">
 						<h2>{{smallTitle}}</h2>
@@ -103,6 +103,8 @@
 				arr.length = 0
 				this.axios.get('/data/classifydetail', {
 						params: {
+							gender: 'male',
+							type: 'hot',
 							major: encodeURIComponent(major),
 							mins: encodeURIComponent(mins),
 							start: start,

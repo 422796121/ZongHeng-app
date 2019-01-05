@@ -4,7 +4,7 @@
 			<div class="header-wrapper">
 				<span class="back" @click="backPage(where)"><i class="icon-left back-icon"></i>返回</span>
 				<span class="title">{{topTitle}}</span>
-				<span class="shelf"><i class="icon-shelf shelf-icon"></i>书架</span>
+				<span class="shelf" @click="$router.push({path:'/account'})"><i class="icon-shelf shelf-icon"></i>书架</span>
 			</div>
 		</div>
 	</div>

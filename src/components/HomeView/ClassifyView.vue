@@ -76,7 +76,7 @@
 			},
 			toClassifyDetail(major, mins) {
 				this.$router.push({
-					name: 'BookClassify',
+					name: 'BookClassifyView',
 					query: {
 						major: major,
 						mins: mins,

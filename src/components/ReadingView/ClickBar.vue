@@ -5,7 +5,7 @@
 				<div class="header-wrapper">
 					<span class="back" @click="backPage"><i class="icon-left back-icon"></i>返回</span>
 					<span class="space"></span>
-					<span class="shelf"><i class="icon-shelf shelf-icon"></i></span>
+					<span class="shelf" @click="$router.push({path:'/account'})"><i class="icon-shelf shelf-icon"></i></span>
 					<span class="comm"><i class="icon-comm comm-icon"></i></span>
 				</div>
 			</div>
@@ -27,7 +27,6 @@
 				<div class="bar-bar" @click="addIndex"><i class="icon-next"></i><span>下一页</span></div>
 			</div>
 		</transition>
-
 	</div>
 </template>
 
@@ -37,8 +36,6 @@
 		props: ['menu', 'chapterlist', 'chapterindex', 'getId', 'detialId', 'night'],
 		data() {
 			return {}
-		},
-		updated() {
 		},
 		methods: {
 			hideBar() {
@@ -253,6 +250,5 @@
 				}
 			}
 		}
-
 	}
 </style>

@@ -30,17 +30,24 @@
 <script>
 	export default {
 		name: 'NovelFooter',
-		props: ['searchFlag', 'history'],
+		props: ['searchFlag'],
 		data() {
 			return {
-				nowType: ''
+				nowType: '',
+				history: sessionStorage['history']
 			}
 		},
 		methods: {
 			toClassifyDetail() {
 				let key = this.$refs.bottomSearch.value
+				this.$refs.bottomSearch.value = ''
 				this.nowType = this.$route.query.type
-				this.$emit('update:history', key)
+				if (sessionStorage['history'] === undefined) {
+					this.history = key
+				} else {
+					this.history += `,${key}`
+				}
+				sessionStorage.setItem('history', this.history)
 				if (this.nowType !== 'search') {
 					this.$router.push({
 						name: 'BookClassify',

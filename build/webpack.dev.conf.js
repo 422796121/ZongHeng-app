@@ -93,17 +93,18 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 						})
 				}),
 				app.get('/data/reading', (req, res) => {
+					console.log(req)
 					let key = req.query
-					superagent.get(`chapter2.zhuishushenqi.com/chapter/${key.chapterid}?k=2124b73d7e2e1945&t=1468223717`)
-						.end((err, data) => {
-							if (err) {
-								console.log(err)
-							}
-							res.json({
-								errno: 0,
-								data: data.text
-							})
-						})
+// 					superagent.get(`chapter2.zhuishushenqi.com/chapter/key.chapterid?k=2124b73d7e2e1945&t=1468223717`)
+// 						.end((err, data) => {
+// 							if (err) {
+// 								console.log(err)
+// 							}
+// 							res.json({
+// 								errno: 0,
+// 								data: data.text
+// 							})
+// 						})
 				}),
 				app.get('/data/classify', (req, res) => {
 					superagent.get('https://novel.juhe.im/sub-categories')
@@ -120,7 +121,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 				app.get('/data/classifydetail', (req, res) => {
 					let key = req.query
 					superagent.get(
-							`novel.juhe.im/category-info?gender=male&type=hot&major=${key.major}&minor=${key.mins}&start=${key.start}&limit=${key.limit}`
+							`novel.juhe.im/category-info?gender=${key.gender}&type=${key.type}&major=${key.major}&minor=${key.mins}&start=${key.start}&limit=${key.limit}`
 						)
 						.end((err, data) => {
 							if (err) {

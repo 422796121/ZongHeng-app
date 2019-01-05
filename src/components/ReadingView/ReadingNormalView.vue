@@ -23,19 +23,36 @@
 <script>
 	export default {
 		name: 'ReadingView',
-		props: ['chapterlist', 'chapterindex', 'getId', 'night'],
+		props: ['night', 'chapterindex'],
 		data() {
 			return {
 				contentArr: [], // 小说内容对象
 				content: [], // 小说内容
-				changeChapterId: ''
+				changeChapterId: '',
+				sendShelf: sessionStorage['shelf'],
+				where: this.$route.query.where,
+				chapterlist: JSON.parse(sessionStorage['book']),
+				// chapterindex: this.$route.query.index,
+				getId: this.$route.query.getid,
+				detialId: sessionStorage['detailid']
 			}
 		},
 		created() {
-			this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
-		},
+			if (this.where === 'shelf') {
+				this.chapterlist = JSON.parse(this.$route.query.chapterlist)
+				console.log(this.chapterlist)
+				this.detialId = this.$route.query.detialId
+				this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
+			}else{
+				this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
+			}
+			// 			this.addChapterShelf(this.sendShelf, this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex].link,
+			// 				this.chapterindex)
+		}, 
 		methods: {
 			getContentData(arr, chapterId) {
+				console.log(chapterId)
+				console.log(typeof chapterId)
 				this.axios.get('/data/reading', {
 						params: {
 							chapterid: chapterId
@@ -53,11 +70,16 @@
 			nextChapter(newChapterList) {
 				this.contentArr = newChapterList
 			},
-			toReading(id) {
+			toReading(id, url, chapterlist, index, getid, detialId) {
 				this.$router.push({
 					name: 'ReadingView',
 					query: {
-						title: id
+						title: id,
+						link: url,
+						// chapterlist: JSON.stringify(chapterlist),
+						index: index,
+						getid: getid,
+						detialId: detialId
 					}
 				})
 			},
@@ -72,16 +94,36 @@
 			},
 			addIndex() {
 				if (this.chapterindex >= this.chapterlist.length) {
-					this.$emit('update:chapterindex', this.chapterlist.length)
+					this.chapterindex = this.chapterlist.length
 				} else {
-					this.$emit('update:chapterindex', this.chapterindex + 1)
+					this.chapterindex = this.chapterindex + 1
 				}
 			},
 			deleIndex() {
 				if (this.chapterindex <= 0) {
-					this.$emit('update:chapterindex', 0)
+					this.chapterindex = 0
 				} else {
-					this.$emit('update:chapterindex', this.chapterindex - 1)
+					this.chapterindex = this.chapterindex - 1
+				}
+			},
+			addChapterShelf(arr, title, url, index) {
+				if (arr !== undefined) {
+					arr = arr.split('++')
+					let j = 0
+					for (let i in arr) {
+						if (arr[i] !== '') {
+							arr[j] = JSON.parse(arr[i])
+							j++
+						}
+					}
+					arr.length = j
+					let repeat = arr.find(a => a.detailid === this.detialId)
+					if (repeat) {
+						repeat['title'] = title
+						repeat['link'] = url
+						repeat['index'] = index
+					}
+					sessionStorage.setItem('shelf', JSON.stringify(arr))
 				}
 			}
 		},
@@ -89,19 +131,21 @@
 			chapterindex(value) {
 				this.contentArr = []
 				this.content = []
-				this.toReading(this.chapterlist[this.chapterindex].title)
-				this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
+				this.toReading(this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex].link, this.chapterlist,
+					this.chapterindex, this.getId, this.detialId)
+				this.getContentData(this.contentArr, this.chapterlist[value].link)
+				this.addChapterShelf(this.sendShelf, this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex]
+					.link, value)
 			}
 		}
 	}
 </script>
-
 <style lang="scss" scoped="scoped">
 	.reading-normal-view {
 		width: 100%;
 		background: RGB(231, 225, 209);
-		
-		&.benight{
+
+		&.benight {
 			background: #000;
 			color: #555555;
 		}
@@ -113,6 +157,7 @@
 			.title {
 				height: 60px;
 				line-height: 30px;
+				line-height: 60px;
 				text-align: center;
 				font-size: 20px;
 				font-weight: bold;

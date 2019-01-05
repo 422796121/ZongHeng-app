@@ -1,42 +1,10 @@
 <template>
-	<div class="home-content" ref="home">
+	<div class="gender-view" ref="gender">
 		<ul>
 			<li>
-				<novel-header></novel-header>
+				<book-header :topTitle="title"></book-header>
 			</li>
 			<li>
-				<!-- 轮播图 -->
-				<div class="home-slide">
-					<div class="swiper-container">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
-								<img src="../../assets/img/slide1.jpg">
-							</div>
-							<div class="swiper-slide">
-								<img src="../../assets/img/slide2.jpg">
-							</div>
-							<div class="swiper-slide">
-								<img src="../../assets/img/slide3.jpg">
-							</div>
-							<div class="swiper-slide">
-								<img src="../../assets/img/slide4.jpg">
-							</div>
-						</div>
-						<div class="swiper-pagination"></div>
-					</div>
-				</div>
-				<!-- 轮播图 END -->
-				<!-- 男女分区 -->
-				<div class="home-sort">
-					<div class="home-man">
-						<a @click="goGender('male')"><i class="manicon"></i><span>男生专区</span></a>
-					</div>
-					<div class="home-wom">
-						<a @click="goGender('female')"><i class="womanicon"></i><span>女生专区</span></a>
-					</div>
-				</div>
-				<!-- 男女分区 END -->
-				<!-- 编辑力荐 -->
 				<div class="recom" v-for="(recombooks,recomindexs) in recomArr" :key="recomindexs">
 					<div class="title">
 						<h2>编辑力荐</h2>
@@ -59,171 +27,222 @@
 						</div>
 					</div>
 				</div>
-				<!-- 编辑力荐 END -->
+
 				<div class="bg-div"></div>
-				<!-- 男生必读 -->
-				<div class="man-view" v-for="(manbooks,manindexs) in manArr" :key="manindexs + '-man'">
+
+				<div class="hot-view" v-for="(hotbooks,hotindexs) in hotArr" :key="hotindexs + '-hot'">
 					<div class="title">
-						<h2>男生必读</h2>
+						<h2>热门作品</h2>
 					</div>
-					<div class="man-wrapper" v-for="(manbook,manindex) in manbooks" :key="manindex" @click="goDetail(manbook._id,topname)">
+					<div class="hot-wrapper" v-for="(hotbook,hotindex) in hotbooks" :key="hotindex" @click="goDetail(hotbook._id,topname)">
 						<div class="cover">
-							<img :src="decodeURIComponent(manbook.cover.split(`/agent/`)[1])" width="82" height="108">
+							<img :src="decodeURIComponent(hotbook.cover.split(`/agent/`)[1])" width="82" height="108">
 						</div>
 						<div class="content">
 							<div class="name">
-								<h3>{{manbook.title}}</h3>
+								<h3>{{hotbook.title}}</h3>
 							</div>
 						</div>
 					</div>
 					<div class="clearfix"></div>
 				</div>
-				<!-- 男生必读 END -->
+
 				<div class="bg-div"></div>
-				<!-- 女生必读 -->
-				<div class="woman-view" v-for="(womanbooks,womanindexs) in womanArr" :key="womanindexs + '-woman'">
+
+				<div class="typefirst-view" v-for="(typeFirstbooks,typeFirstindexs) in typeFirstArr" :key="typeFirstindexs + '-typeFirst'">
 					<div class="title">
-						<h2>女生必读</h2>
+						<h2>{{typeTitle[0]}}</h2>
 					</div>
-					<div class="woman-wrapper" v-for="(womanbook,womanindex) in womanbooks" :key="womanindex" @click="goDetail(womanbook._id,topname)">
+					<div class="typefirst-wrapper" v-for="(typeFirstbook,typeFirstindex) in typeFirstbooks" :key="typeFirstindex"
+					@click="goDetail(typeFirstbook._id,topname)">
+						<div class="wrapper-first" v-show="typeFirstindex==0?true:false">
+							<div class="cover">
+								<img :src="decodeURIComponent(typeFirstbook.cover.split(`/agent/`)[1])" width="68" height="90">
+							</div>
+							<div class="content">
+								<div class="name">
+									<h3>{{typeFirstbook.title}}</h3>
+								</div>
+								<div class="desc">
+									<p>{{typeFirstbook.shortIntro}}</p>
+								</div>
+								<div class="tag">
+									<span class="author"><i class="author-img"></i><em class="text">{{typeFirstbook.author}}</em></span>
+									<span class="tag-sort">{{typeFirstbook.cat}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="wrapper-else" v-show="typeFirstindex==0?false:true">
+							<div class="else-text">
+								<span>[{{typeFirstbook.cat}}]{{typeFirstbook.title}}:{{typeFirstbook.shortIntro}}</span>
+							</div>
+							<i class="icon-right"></i>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-div"></div>
+
+				<div class="typesecond-view" v-for="(typeSecondbooks,typeSecondindexs) in typeSecondArr" :key="typeSecondindexs + '-typeSecond'">
+					<div class="title">
+						<h2>{{typeTitle[1]}}</h2>
+					</div>
+					<div class="typesecond-wrapper" v-for="(typeSecondbook,typeSecondindex) in typeSecondbooks" :key="typeSecondindex"
+					@click="goDetail(typeSecondbook._id,topname)">
+						<div class="wrapper-first" v-show="typeSecondindex==0?true:false">
+							<div class="cover">
+								<img :src="decodeURIComponent(typeSecondbook.cover.split(`/agent/`)[1])" width="68" height="90">
+							</div>
+							<div class="content">
+								<div class="name">
+									<h3>{{typeSecondbook.title}}</h3>
+								</div>
+								<div class="desc">
+									<p>{{typeSecondbook.shortIntro}}</p>
+								</div>
+								<div class="tag">
+									<span class="author"><i class="author-img"></i><em class="text">{{typeSecondbook.author}}</em></span>
+									<span class="tag-sort">{{typeSecondbook.cat}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="wrapper-else" v-show="typeSecondbook==0?false:true">
+							<div class="else-text">
+								<span>[{{typeSecondbook.cat}}]{{typeSecondbook.title}}:{{typeSecondbook.shortIntro}}</span>
+							</div>
+							<i class="icon-right"></i>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-div"></div>
+
+				<div class="typethird-view" v-for="(typeThirdbooks,typeThirdindexs) in typeThirdArr" :key="typeThirdindexs + '-typeThird'">
+					<div class="title">
+						<h2>{{typeTitle[2]}}</h2>
+					</div>
+					<div class="typethird-wrapper" v-for="(typeThirdbook,typeThirdindex) in typeThirdbooks" :key="typeThirdindex"
+					@click="goDetail(typeThirdbook._id,topname)">
+						<div class="wrapper-first" v-show="typeThirdindex==0?true:false">
+							<div class="cover">
+								<img :src="decodeURIComponent(typeThirdbook.cover.split(`/agent/`)[1])" width="68" height="90">
+							</div>
+							<div class="content">
+								<div class="name">
+									<h3>{{typeThirdbook.title}}</h3>
+								</div>
+								<div class="desc">
+									<p>{{typeThirdbook.shortIntro}}</p>
+								</div>
+								<div class="tag">
+									<span class="author"><i class="author-img"></i><em class="text">{{typeThirdbook.author}}</em></span>
+									<span class="tag-sort">{{typeThirdbook.cat}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="wrapper-else" v-show="typeThirdindex==0?false:true">
+							<div class="else-text">
+								<span>[{{typeThirdbook.cat}}]{{typeThirdbook.title}}:{{typeThirdbook.shortIntro}}</span>
+							</div>
+							<i class="icon-right"></i>
+						</div>
+					</div>
+				</div>
+
+				<div class="bg-div"></div>
+
+				<div class="new-view" v-for="(newbooks,newindexs) in newArr" :key="newindexs + '-new'">
+					<div class="title">
+						<h2>新书精选</h2>
+					</div>
+					<div class="new-wrapper" v-for="(newbook,newindex) in newbooks" :key="newindex" @click="goDetail(newbook._id,topname)">
 						<div class="cover">
-							<img :src="decodeURIComponent(womanbook.cover.split(`/agent/`)[1])" width="82" height="108">
+							<img :src="decodeURIComponent(newbook.cover.split(`/agent/`)[1])" width="82" height="108">
 						</div>
 						<div class="content">
 							<div class="name">
-								<h3>{{womanbook.title}}</h3>
+								<h3>{{newbook.title}}</h3>
 							</div>
 						</div>
 					</div>
 					<div class="clearfix"></div>
 				</div>
-				<!-- 女生必读 END -->
-				<div class="bg-div"></div>
-				<!-- 都市 -->
-				<div class="city-view" v-for="(citybooks,cityindexs) in cityArr" :key="cityindexs + '-city'">
-					<div class="title">
-						<h2>都市娱乐</h2>
-					</div>
-					<div class="city-wrapper" v-for="(citybook,cityindex) in citybooks" :key="cityindex" @click="goDetail(citybook._id,topname)">
-						<div class="wrapper-first" v-show="cityindex==0?true:false">
-							<div class="cover">
-								<img :src="decodeURIComponent(citybook.cover.split(`/agent/`)[1])" width="68" height="90">
-							</div>
-							<div class="content">
-								<div class="name">
-									<h3>{{citybook.title}}</h3>
-								</div>
-								<div class="desc">
-									<p>{{citybook.shortIntro}}</p>
-								</div>
-								<div class="tag">
-									<span class="author"><i class="author-img"></i><em class="text">{{citybook.author}}</em></span>
-									<span class="tag-sort">{{citybook.cat}}</span>
-								</div>
-							</div>
-						</div>
-						<div class="wrapper-else" v-show="cityindex==0?false:true">
-							<div class="else-text">
-								<span>[{{citybook.cat}}]{{citybook.title}}:{{citybook.shortIntro}}</span>
-							</div>
-							<i class="icon-right"></i>
-						</div>
-					</div>
-				</div>
-				<!-- 都市 END -->
-				<div class="bg-div"></div>
-				<!-- 游戏 -->
-				<div class="game-view" v-for="(gamebooks,gameindexs) in gameArr" :key="gameindexs + '-game'">
-					<div class="title">
-						<h2>游戏竞技</h2>
-					</div>
-					<div class="game-wrapper" v-for="(gamebook,gameindex) in gamebooks" :key="gameindex" @click="goDetail(gamebook._id,topname)">
-						<div class="wrapper-first" v-if="gameindex==0?true:false">
-							<div class="cover">
-								<img :src="decodeURIComponent(gamebook.cover.split(`/agent/`)[1])" width="68" height="90">
-							</div>
-							<div class="content">
-								<div class="name">
-									<h3>{{gamebook.title}}</h3>
-								</div>
-								<div class="desc">
-									<p>{{gamebook.shortIntro}}</p>
-								</div>
-								<div class="tag">
-									<span class="author"><i class="author-img"></i><em class="text">{{gamebook.author}}</em></span>
-									<span class="tag-sort">{{gamebook.cat}}</span>
-								</div>
-							</div>
-						</div>
-						<div class="wrapper-else" else>
-							<div class="else-text">
-								<span>[{{gamebook.cat}}]{{gamebook.title}}:{{gamebook.shortIntro}}</span>
-							</div>
-							<i class="icon-right"></i>
-						</div>
-					</div>
-				</div>
-				<!-- 游戏 END -->
 			</li>
 			<li>
 				<novel-footer></novel-footer>
 			</li>
 		</ul>
-
 	</div>
-
 </template>
 
 <script>
-	import NovelHeader from './NovelHeader'
+	import BookHeader from '../BookView/BookHeader'
 	import NovelFooter from '../NovelFooter'
 	import BScroll from 'better-scroll'
-	import Swiper from 'swiper'
 	export default {
-		name: 'IndexView',
-		props: ['homeData'],
+		name: 'GenderView',
 		components: {
-			NovelHeader,
+			BookHeader,
 			NovelFooter
 		},
 		data() {
 			return {
-				homeScroll: null,
+				title: '',
+				genderScroll: null,
 				recomArr: [], // 编辑推荐
-				manArr: [], // 男生
-				womanArr: [], // 女生
-				cityArr: [], // 都市
-				gameArr: [], // 游戏
+				hotArr: [], // 热门
+				typeFirstArr: [],
+				typeSecondArr: [],
+				typeThirdArr: [],
+				newArr: [], // 新书,
+				typeTitle: [],
 				topname: '本书详情'
 			}
 		},
 		created() {
 			this.$nextTick(() => {
-				this.getHomeData(this.recomArr, 'recom', '玄幻', 0, 3)
-				this.getHomeData(this.manArr, 'man', '女神', 0, 6)
-				this.getHomeData(this.womanArr, 'woman', '男神', 0, 6)
-				this.getHomeData(this.cityArr, 'city', '都市', 2, 5)
-				this.getHomeData(this.gameArr, 'game', '游戏', 2, 5)
-				this._initHomeScroll()
-			})
-		},
-		mounted() {
-			let myslide = new Swiper('.swiper-container', {
-				spaceBetween: 30,
-				centeredSlides: true,
-				loop: true,
-				autoplay: {
-					delay: 2500,
-					disableOnInteraction: false
-				},
-				pagination: {
-					el: '.swiper-pagination',
-					clickable: true
+				let sex = this.$route.query.gender
+				if (sex === 'male') {
+					this.typeTitle[0] = '都市生活'
+					this.typeTitle[1] = '推理侦探'
+					this.typeTitle[2] = '电子竞技'
+					this.getGenderData(this.recomArr, '游戏', 0, 3)
+					this.getGenderData(this.hotArr, '异界大陆', 0, 6)
+					this.getGenderData(this.typeFirstArr, this.typeTitle[0], 0, 5)
+					this.getGenderData(this.typeSecondArr, this.typeTitle[1], 0, 5)
+					this.getGenderData(this.typeThirdArr, this.typeTitle[2], 0, 5)
+					this.getGenderData(this.newArr, '异界大陆 ', 0, 6)
+					this.title = '男生专区'
+				} else if (this.$route.query.gender === 'female') {
+					this.typeTitle[0] = '豪门'
+					this.typeTitle[1] = '爱情'
+					this.typeTitle[2] = '穿越'
+					this.getGenderData(this.recomArr, '言情', 0, 3)
+					this.getGenderData(this.hotArr, '宫斗', 0, 6)
+					this.getGenderData(this.typeFirstArr, this.typeTitle[0], 0, 5)
+					this.getGenderData(this.typeSecondArr, this.typeTitle[1], 0, 5)
+					this.getGenderData(this.typeThirdArr, this.typeTitle[2], 0, 5)
+					this.getGenderData(this.newArr, '男神', 0, 6)
+					this.title = '女生专区'
 				}
 			})
 		},
+		mounted() {
+			this.$nextTick(() => {
+				this._initGenderScroll()
+			})
+		},
 		methods: {
-			getHomeData(arr, str, query, start, limit) {
+			_initGenderScroll() {
+				if (!this.genderScroll) {
+					this.genderScroll = new BScroll(this.$refs.gender, {
+						click: true
+					})
+				} else {
+					this.genderScroll.refresh()
+				}
+			},
+			getGenderData(arr, query, start, limit) {
 				this.axios.get('/data/home', {
 						params: {
 							query: encodeURIComponent(query),
@@ -235,9 +254,7 @@
 						res = res.data
 						if (res.errno === 0) {
 							arr.push(JSON.parse(res.data).books)
-							// this.$router.replace('/home')
 						}
-						// console.log(arr)
 					})
 			},
 			goDetail(detailid, name) {
@@ -249,30 +266,13 @@
 						topTitle: name
 					}
 				})
-			},
-			goGender(gender) {
-				this.$router.push({
-					path: '/book/gender',
-					query: {
-						gender: gender
-					}
-				})
-			},
-			_initHomeScroll() {
-				if (!this.homeScroll) {
-					this.homeScroll = new BScroll(this.$refs.home, {
-						click: true
-					})
-				} else {
-					this.homeScroll.refresh()
-				}
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped="scoped">
-	.home-content {
+	.gender-view {
 		height: 100%;
 
 		&>ul {
@@ -281,111 +281,12 @@
 			list-style: none;
 		}
 
-		// 轮播图
-		.home-slide {
-			display: flex;
-			font-size: 0;
-
-			.swiper-container {
-				flex: 1;
-				height: 100%;
-			}
-
-			.swiper-slide {
-				text-align: center;
-				font-size: 18px;
-				background: #fff;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: -webkit-flex;
-				display: flex;
-				-webkit-box-pack: center;
-				-ms-flex-pack: center;
-				-webkit-justify-content: center;
-				justify-content: center;
-				-webkit-box-align: center;
-				-ms-flex-align: center;
-				-webkit-align-items: center;
-				align-items: center;
-
-				&>img {
-					width: 100%;
-				}
-			}
-		}
-
-		// 男女分区
-		.home-sort {
-			padding-bottom: 5px;
-			display: flex;
-			width: 100%;
-			border-bottom: 0.5px solid rgba(136, 136, 136, 0.5);
-
-			.home-man,
-			.home-wom {
-				padding: 8px 0;
-				position: relative;
-				flex: 1;
-				display: inline-block;
-				height: 40px;
-
-				&>a {
-					position: absolute;
-					left: 0;
-					right: 0;
-					top: 0;
-					bottom: 0;
-					margin: auto;
-					display: inline-block;
-					width: 175px;
-					height: 40px;
-					line-height: 40px;
-					font-size: 15px;
-					text-align: center;
-					color: #fff;
-					border-radius: 5px;
-				}
-			}
-
-			.home-man {
-				&>a {
-					background: RGB(127, 166, 220);
-				}
-
-				.manicon {
-					margin: 0 2px 4px 2px;
-					display: inline-block;
-					width: 20px;
-					height: 20px;
-					background: url("../../assets/img/man.png") center center no-repeat;
-					vertical-align: middle;
-				}
-			}
-
-			.home-wom {
-				&>a {
-					background: RGB(208, 178, 211);
-				}
-
-				.womanicon {
-					margin: 0 2px 4px 2px;
-					display: inline-block;
-					width: 20px;
-					height: 20px;
-					background: url("../../assets/img/woman.png") center center no-repeat;
-					vertical-align: middle;
-				}
-			}
-		}
-
-		// 空背景
 		.bg-div {
 			height: 10px;
 			width: 100%;
 			background: RGB(245, 245, 245);
 		}
 
-		// 编辑推荐
 		.recom {
 			margin-left: 50%;
 			width: 90%;
@@ -399,8 +300,8 @@
 
 				&>h2 {
 					display: inline-block;
-					margin-left: 10px;
-					font-size: 17px;
+					margin-left: 3px;
+					font-size: 16px;
 					font-weight: 600;
 				}
 			}
@@ -496,9 +397,8 @@
 
 		}
 
-		// 男女分类
-		.man-view,
-		.woman-view {
+		.hot-view,
+		.new-view {
 			width: 90%;
 			margin-left: 50%;
 			transform: translateX(-50%);
@@ -512,13 +412,13 @@
 				&>h2 {
 					display: inline-block;
 					margin-left: 10px;
-					font-size: 17px;
+					font-size: 16px;
 					font-weight: 600;
 				}
 			}
 
-			.man-wrapper,
-			.woman-wrapper {
+			.hot-wrapper,
+			.new-wrapper {
 				flex: 1;
 				width: 33%;
 				padding: 15px 0 10px;
@@ -553,8 +453,9 @@
 
 		}
 
-		.city-view,
-		.game-view {
+		.typefirst-view,
+		.typesecond-view,
+		.typethird-view {
 			margin-left: 50%;
 			width: 90%;
 			transform: translateX(-50%);
@@ -568,13 +469,14 @@
 				&>h2 {
 					display: inline-block;
 					margin-left: 10px;
-					font-size: 17px;
+					font-size: 16px;
 					font-weight: 600;
 				}
 			}
 
-			.city-wrapper,
-			.game-wrapper {
+			.typefirst-wrapper,
+			.typesecond-wrapper,
+			.typethird-wrapper {
 				.wrapper-first {
 					display: flex;
 					padding: 15px 0 10px;
@@ -699,6 +601,8 @@
 				}
 			}
 		}
+
+
 
 
 	}

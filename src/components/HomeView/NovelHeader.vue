@@ -23,7 +23,7 @@
 					<router-link to="/rank">排行</router-link>
 				</div>
 				<div class="tab-item">
-					<router-link to="/shelf">书架</router-link>
+					<router-link to="/account">书架</router-link>
 				</div>
 			</div>
 		</div>

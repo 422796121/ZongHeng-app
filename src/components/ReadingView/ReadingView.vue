@@ -3,12 +3,13 @@
 		<div class="reading-view" ref="reading">
 			<ul>
 				<li>
-					<reading-normal-view :night.sync="night" :getId.sync="getId" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></reading-normal-view>
+					<reading-normal-view :detialId.sync="detialId" :night.sync="night" :getId.sync="getId" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></reading-normal-view>
 					<click-show @movescroll="movescroll" :first.sync="first" :menu.sync="menu"></click-show>
 				</li>
 			</ul>
 		</div>
 		<click-bar :night.sync="night" :detialId.sync="detialId" :getId.sync="getId" :menu.sync="menu" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></click-bar>
+		<click-bar :getId.sync="getId" :menu.sync="menu" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></click-bar>
 	</div>
 
 </template>
@@ -62,13 +63,6 @@
 					this.move++
 				}
 			}
-			// 			chapterindex(value){
-			// 				this.index = value
-			// 			},
-			// 			chapterlist(value){
-			// 				console.log(value)
-			// 				this.list = value
-			// 			}
 		},
 		watch: {
 			move(value, oldvalue) {
@@ -102,6 +96,11 @@
 				margin: 0;
 				padding: 0;
 				list-style: none;
+			}
+
+			.reading-view {
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}

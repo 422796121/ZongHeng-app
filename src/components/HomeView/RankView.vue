@@ -186,7 +186,7 @@
 			},
 			toClassifyDetail(rankid, type) {
 				this.$router.push({
-					name: 'BookClassify',
+					name: 'BookClassifyView',
 					query: {
 						rankid: rankid,
 						type: 'rank',

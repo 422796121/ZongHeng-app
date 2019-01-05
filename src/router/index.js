@@ -7,9 +7,14 @@ import RankView from '@/components/HomeView/RankView'
 import BookHeader from '@/components/BookView/BookHeader'
 import BookDetailView from '@/components/BookView/BookDetailView'
 import BookChapterView from '@/components/BookView/BookChapterView'
-import BookClassify from '@/components/BookView/BookClassify'
+import BookClassifyView from '@/components/BookView/BookClassifyView'
 import SearchView from '@/components/SearchView/SearchView'
+import GenderView from '@/components/SearchView/GenderView'
 import ReadingView from '@/components/ReadingView/ReadingView'
+import ShelfView from '@/components/AccountView/ShelfView'
+import LoginView from '@/components/AccountView/LoginView'
+import RegisterView from '@/components/AccountView/RegisterView'
+
 
 Vue.use(Router)
 
@@ -44,8 +49,8 @@ export default new Router({
 		},
 		{
 			path: '/book/classify',
-			name: 'BookClassify',
-			component: BookClassify
+			name: 'BookClassifyView',
+			component: BookClassifyView
 		},
 		{
 			path: '/reading',
@@ -56,6 +61,26 @@ export default new Router({
 			path: '/book/search',
 			name: 'SearchView',
 			component: SearchView
+		},
+		{
+			path: '/book/gender',
+			name: 'GenderView',
+			component: GenderView
+		},
+		{
+			path: '/account',
+			name: 'ShelfView',
+			component: ShelfView
+		},
+		{
+			path: '/login',
+			name: 'LoginView',
+			component: LoginView
+		},
+		{
+			path: '/register',
+			name: 'RegisterView',
+			component: RegisterView
 		}
 	]
 })

@@ -2,22 +2,22 @@
 	<div class="search-view" ref="search">
 		<ul>
 			<li>
-				<book-header :topTitle="title" :history.sync="history"></book-header>
+				<book-header :topTitle="title"></book-header>
 			</li>
 			<li>
 				<search-header></search-header>
-				<div class="history-wrapper" v-show="historyArr != undefined">
+				<div class="history-wrapper" v-show="historyArr.length != 0">
 					<div class="title">
 						<h2>搜索历史</h2>
 						<span>
 							<i class="icon-clear clear-icon"></i>
-							<span>清除记录</span>
+							<span @click="clearHistory">清除记录</span>
 						</span>
 					</div>
-					<div class="content">
+					<div class="content" v-for="(his,index) in historyArr" :key="index" @click="toClassifyDetail(his)">
 						<div class="text">
 							<i class="icon-history history-icon"></i>
-							<span class="key"></span>
+							<span class="key">{{his}}</span>
 						</div>
 					</div>
 				</div>
@@ -47,7 +47,7 @@
 				</div>
 			</li>
 			<li>
-				<novel-footer :history.sync="history"></novel-footer>
+				<novel-footer></novel-footer>
 			</li>
 		</ul>
 	</div>
@@ -81,8 +81,12 @@
 		created() {
 			this.$nextTick(() => {
 				this.getRankDetailData(this.hotSearchArr, this.hotSearchId, 5)
-				// this.historyArr = sessionStorage['history']
-				console.log(this.historyArr)
+				if (sessionStorage['history'] !== undefined) {
+					this.historyArr = sessionStorage['history'].split(',')
+					while (this.historyArr.length > 5) {
+						this.historyArr.shift()
+					}
+				}
 				this._initSearchScroll()
 			})
 		},
@@ -122,23 +126,25 @@
 				})
 			},
 			toClassifyDetail(key) {
-				this.history = key
-				sessionStorage.setItem(this.history)
+				this.history = sessionStorage['history']
+				if (sessionStorage['history'] === undefined) { 
+					this.history = key
+				} else {
+					this.history += `,${key}`
+				}
+				sessionStorage.setItem('history', this.history)
 				this.$router.push({
-					name: 'BookClassify',
+					name: 'BookClassifyView',
 					query: {
 						searchid: encodeURIComponent(key),
 						type: 'search',
 						major: '搜索结果'
 					}
 				})
-			}
-		},
-		watch: {
-			history(value) {
-				this.historyArr.push(value)
-				console.log(this.historyArr)
-				sessionStorage.setItem('history', this.historyArr)
+			},
+			clearHistory() {
+				sessionStorage.removeItem('history')
+				this.historyArr.length = 0
 			}
 		}
 	}
