@@ -1,6 +1,6 @@
-# novel
+# 模仿手机端纵横小说中文网
 
-> A Vue.js project
+>基于VUE，实现小说的列表展示，小说的搜索、阅读与保存小说到书架
 
 ## Build Setup
 
