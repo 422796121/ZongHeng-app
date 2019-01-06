@@ -32,7 +32,8 @@
 					</div>
 					<div class="detail-btn">
 						<div>
-							<span class="read-now" @click="toReading(order[0].title,order[0].link,chapterArr,0,getId,detialId)">立即阅读</span>
+							<span v-if="readChapter != 0" class="read-now" @click="toReading(order[readChapter].title,order[readChapter].link,chapterArr,readChapter,getId,detialId)">继续阅读</span>
+							<span v-else class="read-now" @click="toReading(order[0].title,order[0].link,chapterArr,0,getId,detialId)">立即阅读</span>
 						</div>
 						<div>
 							<span class="clent">客户端看免费</span>
@@ -125,17 +126,19 @@
 				where: 'detail',
 				addArr: sessionStorage['shelf'],
 				listSession: sessionStorage['list'],
-				readRect: sessionStorage['recent'] ? sessionStorage['recent'] : -1
+				readRect: sessionStorage['recent'] ? sessionStorage['recent'] : -1,
+				readChapter: this.$route.query.readChapter
 			}
 		},
 		created() {
-			// this.detialId = this.$route.query.detailId
 			this.$nextTick(() => {
+				if (this.readChapter === undefined) {
+					this.readChapter = 0
+				}
 				this.getDetailData(this.detailArr, this.detialId)
 				this.getListData(this.listArr, 'list', this.detailName, 0, 1)
 				this.getSourceData(this.sourceArr, this.detialId)
 				this._initHomeScroll()
-				console.log(this.readRect)
 			})
 		},
 		methods: {
@@ -234,7 +237,8 @@
 						// chapterlist: JSON.stringify(chapterlist),
 						index: index,
 						getid: getid,
-						detialId: detialId
+						detialId: detialId,
+						where: 'detail'
 					}
 				})
 			},

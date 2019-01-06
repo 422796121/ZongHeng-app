@@ -20,10 +20,43 @@
 		<transition name="bottom">
 			<div class="bar-bottom" :class="night? 'benight' : ''" v-show="menu">
 				<div class="bar-prev" @click="deleIndex"><i class="icon-prev"></i><span>上一页</span></div>
-				<div class="bar-font"><i class="icon-font"></i><span>字体</span></div>
+				<div class="bar-font" @click="changeState($event,!font,bg)">
+					<div class="wrapper" v-show="font">
+						<div class="wrapper-font">
+							<div class="dele" @click="deleFont">
+								<span><i></i></span>
+							</div>
+							<div class="add" @click="addFont">
+								<span><i></i></span>
+							</div>
+						</div>
+						<div class="tri">
+							<div>
+								<div class="font-tri"></div>
+							</div>
+						</div>
+					</div>
+					<i class="icon-font"></i><span>字体</span>
+				</div>
 				<div class="bar-night" @click="changeNight" v-if="!night"><i class="icon-night"></i><span>夜间</span></div>
 				<div class="bar-night" @click="changeNight" v-else><i class="icon-night"></i><span>白天</span></div>
-				<div class="bar-bg"><i class="icon-bg"></i><span>背景</span></div>
+				<div class="bar-bg" @click="changeState($event,font,!bg)">
+					<div class="wrapper" v-show="bg">
+						<div class="wrapper-bg">
+							<div class="bg-color" v-for="(col,index) in bgcolor" :key="index" @click="changeBg(index)">
+								<span :style="{backgroundColor: col.color}"></span>
+								<div>{{col.name}}</div>
+							</div>
+						</div>
+						<div class="tri">
+							<div>
+								<div class="bg-tri"></div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<i class="icon-bg"></i><span>背景</span>
+				</div>
 				<div class="bar-bar" @click="addIndex"><i class="icon-next"></i><span>下一页</span></div>
 			</div>
 		</transition>
@@ -33,13 +66,20 @@
 <script>
 	export default {
 		name: 'ClickBar',
-		props: ['menu', 'chapterlist', 'chapterindex', 'getId', 'detialId', 'night'],
+		props: ['menu', 'chapterlist', 'chapterindex', 'getId', 'detialId', 'night', 'tool', 'pfont', 'hfont', 'bgcolor',
+			'bgindex'
+		],
 		data() {
-			return {}
+			return {
+				font: false,
+				bg: false
+			}
 		},
 		methods: {
 			hideBar() {
-				this.$emit('update:menu', !this.menu)
+				if (this.font !== true) {
+					this.$emit('update:menu', !this.menu)
+				}
 			},
 			backPage() {
 				this.$router.push({
@@ -76,6 +116,49 @@
 			},
 			changeNight() {
 				this.$emit('update:night', !this.night)
+			},
+			changeState(e, f, b) {
+				this.font = f
+				this.bg = b
+				e.cancelBubble = true
+			},
+			addFont(e) {
+				this.$emit('update:pfont', this.pfont + 1)
+				this.$emit('update:hfont', this.hfont + 1)
+				e.cancelBubble = true
+			},
+			deleFont(e) {
+				if (this.pfont <= 0) {
+					this.$emit('update:pfont', 0)
+					this.$emit('update:hfont', 2)
+				} else {
+					this.$emit('update:pfont', this.pfont - 1)
+					this.$emit('update:hfont', this.hfont - 1)
+				}
+				e.cancelBubble = true
+			},
+			changeBg(index) {
+				this.$emit('update:bgindex', index)
+			}
+		},
+		watch: {
+			tool(val) {
+				if (val === false) {
+					this.font = false
+					this.bg = false
+				}
+			},
+			font(val) {
+				if (val === true) {
+					this.$emit('update:tool', true)
+					this.bg = false
+				}
+			},
+			bg(val) {
+				if (val === true) {
+					this.$emit('update:tool', true)
+					this.font = false
+				}
 			}
 		}
 	}
@@ -247,6 +330,152 @@
 					text-align: center;
 					font-size: 16px;
 					vertical-align: bottom;
+				}
+			}
+
+			.bar-font,
+			.bar-bg {
+				position: relative;
+
+				.wrapper {
+					position: absolute;
+					top: -79px;
+					height: 79px;
+					z-index: 999;
+				}
+			}
+
+			.bar-font {
+				.wrapper {
+					left: -50%;
+
+					.wrapper-font {
+						display: flex;
+						height: 65px;
+						width: 300px;
+						background: #8e949d;
+						border-radius: 4px;
+						border: 1px solid #656b74;
+
+						.dele,
+						.add {
+							position: relative;
+							width: 50%;
+
+							&>span {
+								position: absolute;
+								left: 50%;
+								top: 50%;
+								transform: translateY(-50%) translateX(-50%);
+								margin: 0 auto;
+								display: inline-block;
+								width: 85%;
+								height: 32px;
+								border: 1px solid #656b74;
+								background: #f6f6f6;
+								border-radius: 4px;
+							}
+						}
+
+						.add {
+							&>span {
+								background: url(../../assets/img/fontadd.png) center center no-repeat;
+								background-size: 32px 32px;
+								background-color: #fff;
+							}
+						}
+
+						.dele {
+							&>span {
+								background: url(../../assets/img/fontdele.png) center center no-repeat;
+								background-size: 32px 32px;
+								background-color: #fff;
+							}
+						}
+					}
+
+					.tri {
+						height: 13px;
+
+						&>div {
+							position: relative;
+							width: 50%;
+							height: 13px;
+
+							.font-tri {
+								position: absolute;
+								left: 50%;
+								bottom: 0;
+								transform: translateX(-50%);
+								height: 0;
+								width: 0;
+								border-left: 10px solid transparent;
+								border-right: 10px solid transparent;
+								border-top: 14px solid #8e949d;
+							}
+						}
+
+					}
+				}
+			}
+
+			.bar-bg {
+				.wrapper {
+					right: -50%;
+					top: -93px;
+
+					.wrapper-bg {
+						display: flex;
+						height: 79px;
+						width: 300px;
+						background: #8e949d;
+						border-radius: 4px;
+						border: 1px solid #656b74;
+
+						.bg-color {
+							flex: 1;
+
+							&>span {
+								margin-top: 12px;
+								margin-bottom: 7px;
+								margin-left: 50%;
+								transform: translateX(-50%);
+								display: inline-block;
+								height: 38px;
+								width: 38px;
+								border: 1px solid #ffffff;
+							}
+
+							&>div {
+								text-align: center;
+								font-size: 13px;
+							}
+						}
+					}
+
+					.tri {
+						height: 13px;
+
+						&>div {
+							position: relative;
+							width: 50%;
+							height: 13px;
+							float: right;
+
+							.bg-tri {
+								position: absolute;
+								left: 50%;
+								bottom: 0;
+								transform: translateX(-50%);
+								height: 0;
+								width: 0;
+								border-left: 10px solid transparent;
+								border-right: 10px solid transparent;
+								border-top: 14px solid #8e949d;
+							}
+						}
+
+					}
 				}
 			}
 		}

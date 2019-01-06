@@ -3,15 +3,17 @@
 		<div class="reading-view" ref="reading">
 			<ul>
 				<li>
-					<reading-normal-view :detialId.sync="detialId" :night.sync="night" :getId.sync="getId" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></reading-normal-view>
-					<click-show @movescroll="movescroll" :first.sync="first" :menu.sync="menu"></click-show>
+					<reading-normal-view :bgindex.sync="bgindex" :pfont.sync="pfont" :hfont.sync="hfont" :bgcolor.sync="bgcolor"
+					 :detialId.sync="detialId" :night.sync="night" :getId.sync="getId" :chapterindex.sync="chapterindex"
+					 :chapterlist.sync="chapterlist"></reading-normal-view>
+					<click-show @movescroll="movescroll" :first.sync="first" :menu.sync="menu" :tool.sync="tool"></click-show>
 				</li>
 			</ul>
 		</div>
-		<click-bar :night.sync="night" :detialId.sync="detialId" :getId.sync="getId" :menu.sync="menu" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></click-bar>
-		<click-bar :getId.sync="getId" :menu.sync="menu" :chapterindex.sync="chapterindex" :chapterlist.sync="chapterlist"></click-bar>
+		<click-bar :bgindex.sync="bgindex" :pfont.sync="pfont" :hfont.sync="hfont" :bgcolor.sync="bgcolor" :night.sync="night"
+		 :detialId.sync="detialId" :getId.sync="getId" :menu.sync="menu" :tool.sync="tool" :chapterindex.sync="chapterindex"
+		 :chapterlist.sync="chapterlist"></click-bar>
 	</div>
-
 </template>
 
 <script>
@@ -19,6 +21,23 @@
 	import ClickShow from './ClickShow'
 	import ClickBar from './ClickBar'
 	import BScroll from 'better-scroll'
+
+	const bgcolor = [{
+		name: '羊皮纸',
+		color: '#e8e2d2'
+	}, {
+		name: '淡雅白',
+		color: '#f9f8f5'
+	}, {
+		name: '冰爽蓝',
+		color: '#c3deed'
+	}, {
+		name: '浪漫粉',
+		color: '#e0b6c4'
+	}, {
+		name: '护眼绿',
+		color: '#a6bc9c'
+	}]
 	export default {
 		name: 'ReadingView',
 		components: {
@@ -39,11 +58,16 @@
 				move: 0,
 				first: true,
 				menu: false,
+				tool: false,
 				chapterlist: JSON.parse(sessionStorage['book']),
 				chapterindex: this.$route.query.index,
 				getId: this.$route.query.getid,
 				detialId: sessionStorage['detailid'],
-				night: false // 夜间模式,
+				night: false, // 夜间模式,
+				bgcolor: bgcolor,
+				bgindex: -1,
+				hfont: 20,
+				pfont: 18
 			}
 		},
 		methods: {
@@ -75,6 +99,11 @@
 			first(value) {
 				if (this.first === false) {
 					this.readingScroll.enable()
+				}
+			},
+			menu(val) {
+				if (val === false) {
+					this.tool = false
 				}
 			}
 		}

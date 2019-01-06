@@ -153,7 +153,8 @@
 						// chapterlist: JSON.stringify(chapterlist),
 						index: index,
 						getid: getid,
-						detailid: this.detailid
+						detailid: this.detailid,
+						where: 'chapter'
 					}
 				})
 			},

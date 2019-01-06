@@ -17,11 +17,11 @@
 				</div>
 				<div class="shelf-wrapper" v-show="shelfArr.length != 0">
 					<div class="shelf-header">
-						<span>共收藏<em>{{shelfArr.length + 1}}</em>本</span>
+						<span>共收藏<em>{{shelfArr.length}}</em>本</span>
 						<span class="btn" v-show="!dele" @click="dele = !dele">编辑</span>
-						<span class="btn" v-show="dele" @click="dele = !dele">完成</span>
+						<span class="btn" v-show="dele" @click="saveShelf">完成</span>
 					</div>
-					<div class="shelf-item" v-for="(book,index) in shelfArr" :key="index" @click="toReading(book.title, book.link, bookArr[index], book.index, book.getid, book.detialid)">
+					<div class="shelf-item" v-for="(book,index) in shelfArr" :key="index" @click="goDetail(book.detailid, book.index)">
 						<div class="item-wrapper">
 							<div class="cover">
 								<img :src="decodeURIComponent(book.cover)" width="85" height="115">
@@ -40,7 +40,7 @@
 									<span>最新章节: <em>{{book.lastChapter}}</em></span>
 								</div>
 							</div>
-							<div class="dele-btn" v-show="dele" @click="deleBook(index)">
+							<div class="dele-btn" v-show="dele" @click="deleBook($event,index)">
 								<span>删除</span>
 							</div>
 						</div>
@@ -89,17 +89,15 @@
 					this.shelfScroll.refresh()
 				}
 			},
-			toReading(id, url, chapterlist, index, getid, detialId) {
+			goDetail(detailid, history) {
+				console.log(detailid)
+				sessionStorage.setItem('detailid', detailid)
 				this.$router.push({
-					name: 'ReadingView',
+					path: '/book/detail',
 					query: {
-						title: id,
-						link: url,
-						chapterlist: JSON.stringify(chapterlist),
-						index: index,
-						getid: getid,
-						detialId: detialId,
-						where: 'shelf'
+						detailId: detailid,
+						topTitle: '本书详情',
+						readChapter: history
 					}
 				})
 			},
@@ -134,8 +132,26 @@
 					this.shelfArr = []
 				}
 			},
-			deleBook(index) {
+			deleBook(e,index) {
 				this.shelfArr.splice(index, 1)
+				this.bookArr.splice(index, 1)
+				e.cancelBubble = true
+			},
+			saveShelf(){
+				sessionStorage.setItem('shelf', this.changeArr(this.shelfArr))
+				sessionStorage.setItem('list', this.changeArr(this.bookArr))
+				this.dele = !this.dele
+			},
+			changeArr(arr) {
+				let str = ''
+				for (let i in arr) {
+					if (i === 0) {
+						str = JSON.stringify(arr[i])
+					} else {
+						str += `++${JSON.stringify(arr[i])}`
+					}
+				}
+				return str
 			}
 		},
 		watch: {

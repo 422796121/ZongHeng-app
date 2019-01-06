@@ -1,9 +1,9 @@
 <template>
-	<div class="reading-normal-view" :class="night? 'benight' : ''">
+	<div class="reading-normal-view" :class="night? 'benight' : ''" ref="readingview">
 		<div class="reading-normal-wrapper">
-			<h2 class="title">{{contentArr.title}}</h2>
+			<h2 class="title" ref="titlefont">{{contentArr.title}}</h2>
 			<div class="normal-content">
-				<p class="content" v-for="(text,index) in content" :key="index">{{text}}</p>
+				<p class="content" ref="contentfont" v-for="(text,index) in content" :key="index">{{text}}</p>
 			</div>
 			<div class="normal-btn">
 				<div class="prev">
@@ -23,7 +23,7 @@
 <script>
 	export default {
 		name: 'ReadingView',
-		props: ['night', 'chapterindex'],
+		props: ['night', 'chapterindex', 'pfont', 'hfont', 'bgcolor', 'bgindex'],
 		data() {
 			return {
 				contentArr: [], // 小说内容对象
@@ -40,19 +40,14 @@
 		created() {
 			if (this.where === 'shelf') {
 				this.chapterlist = JSON.parse(this.$route.query.chapterlist)
-				console.log(this.chapterlist)
 				this.detialId = this.$route.query.detialId
-				this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
-			}else{
-				this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
 			}
-			// 			this.addChapterShelf(this.sendShelf, this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex].link,
-			// 				this.chapterindex)
-		}, 
+			this.getContentData(this.contentArr, this.chapterlist[this.chapterindex].link)
+			this.addChapterShelf(this.sendShelf, this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex].link,
+				this.chapterindex)
+		},
 		methods: {
 			getContentData(arr, chapterId) {
-				console.log(chapterId)
-				console.log(typeof chapterId)
 				this.axios.get('/data/reading', {
 						params: {
 							chapterid: chapterId
@@ -63,6 +58,7 @@
 						if (res.errno === 0) {
 							arr.push(JSON.parse(res.data))
 							this.contentArr = arr[0].chapter
+							console.log(arr[0])
 							this.content = this.contentArr.cpContent.split('\n')
 						}
 					})
@@ -123,8 +119,19 @@
 						repeat['link'] = url
 						repeat['index'] = index
 					}
-					sessionStorage.setItem('shelf', JSON.stringify(arr))
+					sessionStorage.setItem('shelf', this.changeArr(arr))
 				}
+			},
+			changeArr(arr) {
+				let str = ''
+				for (let i in arr) {
+					if (i === 0) {
+						str = JSON.stringify(arr[i])
+					} else {
+						str += `++${JSON.stringify(arr[i])}`
+					}
+				}
+				return str
 			}
 		},
 		watch: {
@@ -136,6 +143,17 @@
 				this.getContentData(this.contentArr, this.chapterlist[value].link)
 				this.addChapterShelf(this.sendShelf, this.chapterlist[this.chapterindex].title, this.chapterlist[this.chapterindex]
 					.link, value)
+			},
+			pfont(val) {
+				for (let i in this.content) {
+					this.$refs.contentfont[i].style.fontSize = `${val}px`
+				}
+			},
+			hfont(val) {
+				this.$refs.titlefont.style.fontSize = `${val}px`
+			},
+			bgindex(val) {
+				this.$refs.readingview.style.background = this.bgcolor[val].color
 			}
 		}
 	}

@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
     proxyTable: {
 // 			'/data/source': {  // 使用"/queue-admin"来代替 API头部，可随意命名
 //             //target: 'http://192.168.11.12:8080',  // 源地址 本地开发的API头部

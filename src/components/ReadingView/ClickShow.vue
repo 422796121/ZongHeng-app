@@ -9,7 +9,7 @@
 <script>
 	export default {
 		name: 'ClickShow',
-		props: ['first', 'menu'],
+		props: ['first', 'menu', 'tool'],
 		data() {
 			return {
 				move: ''
@@ -30,6 +30,7 @@
 					this.$emit('update:first', false)
 					return
 				}
+				this.$emit('update:tool', false)
 				this.$emit('update:menu', !this.menu)
 			}
 		}
