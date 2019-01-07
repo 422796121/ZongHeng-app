@@ -90,7 +90,6 @@
 				}
 			},
 			goDetail(detailid, history) {
-				console.log(detailid)
 				sessionStorage.setItem('detailid', detailid)
 				this.$router.push({
 					path: '/book/detail',
@@ -132,12 +131,12 @@
 					this.shelfArr = []
 				}
 			},
-			deleBook(e,index) {
+			deleBook(e, index) {
 				this.shelfArr.splice(index, 1)
 				this.bookArr.splice(index, 1)
 				e.cancelBubble = true
 			},
-			saveShelf(){
+			saveShelf() {
 				sessionStorage.setItem('shelf', this.changeArr(this.shelfArr))
 				sessionStorage.setItem('list', this.changeArr(this.bookArr))
 				this.dele = !this.dele

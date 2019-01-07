@@ -31,6 +31,7 @@ module.exports = {
 		'key-spacing': 'off',
 		'no-trailing-spaces':'off',
 		'no-unused-vars':'off',
-		'no-multiple-empty-lines':'off'
+		'no-multiple-empty-lines':'off',
+		'no-mixed-spaces-and-tabs':'off'
   }
 }

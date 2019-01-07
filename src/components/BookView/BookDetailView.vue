@@ -28,7 +28,8 @@
 								<span>已有<em>{{detail.latelyFollower}}人次</em>读过此书</span>
 							</div>
 						</div>
-						<div class="add-shelf" @click="addBook(addArr,listSession)"><i>+</i>书架</div>
+						<div class="add-shelf" v-if="!shelfOrNotState" @click="addBook(addArr,listSession)"><i>+</i>书架</div>
+						<div class="add-shelf" v-else @click="deleBook(addArr,listSession)">已收藏</div>
 					</div>
 					<div class="detail-btn">
 						<div>
@@ -127,19 +128,27 @@
 				addArr: sessionStorage['shelf'],
 				listSession: sessionStorage['list'],
 				readRect: sessionStorage['recent'] ? sessionStorage['recent'] : -1,
-				readChapter: this.$route.query.readChapter
+				readChapter: this.$route.query.readChapter,
+				shelfOrNotState: false,
+				shelfNum: -1
 			}
 		},
 		created() {
 			this.$nextTick(() => {
+				if (this.addArr !== undefined) {
+					this.addArr = this.inShelfOrNot(this.addArr)
+					this.listSession = this.inShelfOrNot(this.listSession)
+				}
 				if (this.readChapter === undefined) {
 					this.readChapter = 0
 				}
 				this.getDetailData(this.detailArr, this.detialId)
 				this.getListData(this.listArr, 'list', this.detailName, 0, 1)
 				this.getSourceData(this.sourceArr, this.detialId)
-				this._initHomeScroll()
 			})
+		},
+		mounted() {
+			this._initHomeScroll()
 		},
 		methods: {
 			getDetailData(arr, detail) {
@@ -263,24 +272,8 @@
 					sessionStorage.setItem('shelf', JSON.stringify(arr))
 					sessionStorage.setItem('list', JSON.stringify(listArr))
 				} else {
-					arr = arr.split('++')
-					let j = 0
-					for (let i in arr) {
-						if (arr[i] !== '') {
-							arr[j] = JSON.parse(arr[i])
-							j++
-						}
-					}
-					arr.length = j
-					listArr = listArr.split('++')
-					j = 0
-					for (let i in listArr) {
-						if (listArr[i] !== '') {
-							listArr[j] = JSON.parse(listArr[i])
-							j++
-						}
-					}
-					listArr.length = j
+					arr = this.addArr
+					listArr = this.listSession
 					let repeat = arr.find(a => a.detailid === this.detialId)
 					if (repeat === undefined) {
 						temp = arr
@@ -289,9 +282,21 @@
 						tempList.push(this.chapterArr)
 						sessionStorage.setItem('shelf', this.changeArr(temp))
 						sessionStorage.setItem('list', this.changeArr(tempList))
+						this.addArr = temp
+						this.listSession = listArr
 					}
 				}
 				this.readRect = -1
+				this.shelfOrNotState = true
+			},
+			deleBook(arr, listArr) {
+				this.addArr = this.addArr.splice(this.shelfNum, 1)
+				this.listSession = this.listSession.splice(this.shelfNum, 1)
+				sessionStorage.setItem('shelf', this.changeArr(arr))
+				sessionStorage.setItem('list', this.changeArr(listArr))
+				this.addArr = arr
+				this.listSession = listArr
+				this.shelfOrNotState = false
 			},
 			changeArr(arr) {
 				let str = ''
@@ -303,6 +308,32 @@
 					}
 				}
 				return str
+			},
+			manageShelf(arr) {
+				arr = arr.split('++')
+				let j = 0
+				for (let i in arr) {
+					if (arr[i] !== '') {
+						arr[j] = JSON.parse(arr[i])
+						j = parseInt(j) + 1
+					}
+				}
+				arr.length = j
+				return arr
+			},
+			inShelfOrNot(arr) {
+				arr = this.manageShelf(arr)
+				let book = arr.find(a => a.detailid === this.detialId)
+				if (book) {
+					this.readChapter = book.index
+					this.shelfOrNotState = true
+					for (let i in arr) {
+						if (arr[i] === book) {
+							this.shelfNum = parseInt(i)
+						}
+					}
+				}
+				return arr
 			},
 			_initHomeScroll() {
 				if (!this.detailScroll) {
