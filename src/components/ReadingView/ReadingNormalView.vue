@@ -58,7 +58,7 @@
 						if (res.errno === 0) {
 							arr.push(JSON.parse(res.data))
 							this.contentArr = arr[0].chapter
-							console.log(arr[0])
+							// console.log(arr[0])
 							this.content = this.contentArr.cpContent.split('\n')
 						}
 					})
@@ -90,16 +90,16 @@
 			},
 			addIndex() {
 				if (this.chapterindex >= this.chapterlist.length) {
-					this.chapterindex = this.chapterlist.length
+					this.$emit('update:chapterindex', this.chapterlist.length)
 				} else {
-					this.chapterindex = this.chapterindex + 1
+					this.$emit('update:chapterindex', this.chapterindex + 1)
 				}
 			},
 			deleIndex() {
 				if (this.chapterindex <= 0) {
-					this.chapterindex = 0
+					this.$emit('update:chapterindex', 0)
 				} else {
-					this.chapterindex = this.chapterindex - 1
+					this.$emit('update:chapterindex', this.chapterindex - 1)
 				}
 			},
 			addChapterShelf(arr, title, url, index) {

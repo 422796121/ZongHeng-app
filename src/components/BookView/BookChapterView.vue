@@ -21,7 +21,7 @@
 
 			</li>
 			<li>
-				<div class="chapter" v-for="(chaps,chapsIndex) in order" :key="chapsIndex" @click="toReading(chaps.title,chaps.link,chapterArr,chapsIndex,getId)">
+				<div class="chapter" v-for="(chaps,chapsIndex) in order" :key="chapsIndex" @click="selectToRead(chaps.title,chaps.link,chapsIndex)">
 					<div class="chapter-content">
 						<span class="text">
 							<em v-if="!sort">{{(chapsIndex+1)+(page-1)*20}}.</em>
@@ -157,6 +157,15 @@
 						where: 'chapter'
 					}
 				})
+			},
+			selectToRead(title, link, index) {
+				let nonchap = 20 - this.chapterArr.length % 20
+				if (this.sort === false) {
+					this.toReading(title, link, this.chapterArr, index + (this.page - 1) * 20, this.getId)
+				} else {
+					this.toReading(title, link, this.chapterArr, (this.selectCount - this.page) * 20 + (20 - index - nonchap - 1),
+						this.getId)
+				}
 			},
 			_initHomeScroll() {
 				if (!this.homeScroll) {
